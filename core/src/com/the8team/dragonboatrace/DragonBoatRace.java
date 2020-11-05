@@ -1,6 +1,5 @@
 package com.the8team.dragonboatrace;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,8 +12,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.Game;
 
-public class DragonBoatRace extends ApplicationAdapter{
+public class DragonBoatRace extends Game{
     Texture img;
     TiledMap tiledMap;
     OrthographicCamera camera;
