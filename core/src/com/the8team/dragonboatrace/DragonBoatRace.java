@@ -30,4 +30,3 @@ public class DragonBoatRace extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
-}
