@@ -1,8 +1,5 @@
 package com.the8team.dragonboatrace;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Opponent extends Boat {
@@ -23,10 +20,9 @@ public class Opponent extends Boat {
 	 * @param maneuverability
 	 * @param world
 	 */
-	public Opponent(int x, int y, int width, int height, boolean isStatic, int health,
-					int stamina, float acceleration, float maneuverability, World world) {
-		super(x, y, width, height, isStatic, health, stamina, acceleration, maneuverability, world);
-		this.sprite = new Texture("sprites/boat.png");
+	public Opponent(int x, int y, int width, int height,  int maxSpeed, int health,
+					int stamina, float acceleration, float maneuverability, World world, String textureFile) {
+		super(x, y, width, height, health, maxSpeed, stamina, acceleration, maneuverability, world, "sprites/boat.png");
     }
 
     public void move(float delta) {

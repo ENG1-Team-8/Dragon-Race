@@ -12,7 +12,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -56,7 +55,7 @@ public class DragonBoatRace extends ApplicationAdapter {
         startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(128, 128, 32, 16, false, 10, 10, 1f, 2.0f, world);
+		player = new Player(700, 340, 48, 16, 100, 10, 10, 100f, 2.0f, world, "sprites/boat.png");
 
 		// Create a sprite batch for rendering objects
 		batch = new SpriteBatch();
