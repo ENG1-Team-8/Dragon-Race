@@ -30,7 +30,6 @@ public class DragonBoatRace extends ApplicationAdapter {
 	Box2DDebugRenderer dr;
 	World world;
 	Player player;
-	Body platform;
 
 	// Sprite rendering
 	SpriteBatch batch;
