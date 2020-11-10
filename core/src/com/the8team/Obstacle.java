@@ -1,4 +1,4 @@
-public class Obstacle extends Moving_object {
+public class Obstacle extends MovingObject {
 
     int damage_dealt;
     int health;
