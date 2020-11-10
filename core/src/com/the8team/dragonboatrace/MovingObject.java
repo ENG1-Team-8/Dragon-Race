@@ -33,41 +33,6 @@ public abstract class MovingObject {
         batch.draw(objectTexture,xPosition,yPosition,width,height);
     }
 
-    public float getX() {
-        return xPosition;
-    }
-
-    public float getY() {
-        return yPosition;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-
-    public void setX(float x) {
-        this.xPosition=x;
-    }
-
-    public void setY(float y) {
-        this.yPosition=y;
-    }
-
-    public void setSize(float width, float height) {
-        this.height=height;
-        this.width=width;
-    }
-
-    public Rectangle getBoundaryBox ()
-    {
-        return BoundBox;
-    }
-
     public void setMovementSpeed (float movementSpeed)
     {
         this.movementSpeed=movementSpeed;
