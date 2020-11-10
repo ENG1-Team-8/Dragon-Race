@@ -8,7 +8,7 @@ public abstract class MovingObject {
     private float xPosition,yPosition;
     private float width,height;
     private Texture objectTexture;
-    private float movementSpeed,acceleration;
+    private float movementSpeed;
 
     public MovingObject(float xPosition, float yPosition, float width, float height,
                         Texture objectTexture,float movementSpeed)
