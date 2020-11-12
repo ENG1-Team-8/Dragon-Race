@@ -138,6 +138,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Checks for player input
 		player.inputUpdate(delta);
+		
+		//checks if the player is outside the lane
+		player.inLane();
 
 		// Updates the camera
 		cameraUpdate(delta);
