@@ -35,9 +35,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	// Music
 	Sound startMusic;
-	
+
 	@Override
-	public void create () {
+	public void create() {
 		// Get height and width of window for camera
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
@@ -47,12 +47,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 		camera.setToOrtho(false, w, h);
 
 		// Create a box2d world to hold the objects
-		world = new World(new Vector2(0,0), false);
+		world = new World(new Vector2(0, 0), false);
 		dr = new Box2DDebugRenderer();
 
 		// Create music
 		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
-        startMusic.play(0.2f);
+		startMusic.play(0.2f);
 
 		// Create the player
 		player = new Player(700, 340, 48, 16, 100, 10, 10, 100f, 2.0f, world, "sprites/boat.png");
@@ -70,7 +70,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 
 		// Updates game logic
 		update(Gdx.graphics.getDeltaTime());
@@ -91,20 +91,21 @@ public class DragonBoatRace extends ApplicationAdapter {
 		dr.render(world, camera.combined.scl(scale));
 
 		// Allows game to be quit with escape key
-		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+			Gdx.app.exit();
 	}
 
 	// Potential resize function if game brief changes
-	//@Override
-	//public void resize(int width, int height) {
-	//	camera.setToOrtho(false, width, height);
-	//}
-	
+	// @Override
+	// public void resize(int width, int height) {
+	// camera.setToOrtho(false, width, height);
+	// }
+
 	/**
 	 * Disposes of objects for efficiency
 	 */
 	@Override
-	public void dispose () {
+	public void dispose() {
 		world.dispose();
 		dr.dispose();
 		batch.dispose();
@@ -122,7 +123,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
-		world.step(1/60f, 6, 2);
+		world.step(1 / 60f, 6, 2);
 
 		// Checks for player input
 		player.inputUpdate(delta);
@@ -135,7 +136,6 @@ public class DragonBoatRace extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 
 	}
-
 
 	/**
 	 * Updates the camera
@@ -151,11 +151,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 		position.x = player.getPosition().x * scale;
 
 		// Follow the y-centre of the map
-		position.y = 720/2;
+		position.y = 720 / 2;
 		camera.position.set(position);
 
 		camera.update();
 	}
-
 
 }
