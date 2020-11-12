@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -27,7 +28,8 @@ public class MovingObject {
 		// Creates the box2d body in the game world
         this.bBody = createBox(x, y, width, height, isStatic, world);
         this.sprite = new Texture(textureFile);
-        this.maxSpeed = maxSpeed;
+		this.maxSpeed = maxSpeed;
+		this.bBody.setUserData(this);
 	}
 	
 	/**
@@ -81,5 +83,12 @@ public class MovingObject {
 	 */
 	public Vector2 getPosition() {
 		return this.bBody.getPosition();
-    }
+	}
+	
+	public void removeCollision() {
+		for(Fixture fixture : this.bBody.getFixtureList()) {
+			this.bBody.destroyFixture(fixture);
+		}
+	}
+
 }

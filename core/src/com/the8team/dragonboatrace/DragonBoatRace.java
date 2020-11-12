@@ -1,5 +1,7 @@
 package com.the8team.dragonboatrace;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -35,6 +37,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	// Music
 	Sound startMusic;
+
+	// Objects to delete
+	static ArrayList<MovingObject> toDelete = new ArrayList<MovingObject>();
 	
 	@Override
 	public void create () {
@@ -48,6 +53,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Create a box2d world to hold the objects
 		world = new World(new Vector2(0,0), false);
+		world.setContactListener(new b2ContactListener());
 		dr = new Box2DDebugRenderer();
 
 		// Create music
@@ -123,6 +129,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
 		world.step(1/60f, 6, 2);
+		if(toDelete.size() > 0) {
+			for (MovingObject obj : toDelete) {
+				obj.removeCollision();
+				toDelete.remove(obj);
+			}
+		}
 
 		// Checks for player input
 		player.inputUpdate(delta);
