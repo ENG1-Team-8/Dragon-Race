@@ -7,7 +7,7 @@ public class Boat extends MovingObject{
 
 	// Boat characteristics
     int health;
-    int stamina;
+    float stamina;
     float acceleration;
 	float maneuverability;
 
@@ -20,6 +20,9 @@ public class Boat extends MovingObject{
 
 	//is boat slowed
 	Boolean slowed;
+
+	//is boat out of stamina
+	Boolean outOfStamina;
 
 	/**
 	 * Constructs a boat object
@@ -49,6 +52,7 @@ public class Boat extends MovingObject{
 		this.maneuverability = maneuverability;
 		this.yMin = y - 40;
 		this.yMax = y + 40;
+		this.outOfStamina = false;
 
 	}
 	
@@ -72,14 +76,16 @@ public class Boat extends MovingObject{
 	 * @param delta
 	 */
 	public void updateMovement(int horizontalForce, int verticalForce, float delta) {
-
 		// Accelerates the boat over a set time regardless of framerate
-		this.mvmntSpeed += horizontalForce * this.acceleration * delta;
+		this.mvmntSpeed += horizontalForce * (this.acceleration*(stamina/1000)) * delta;
 
 		// Stops the boat from going backwards
 		if(this.mvmntSpeed < 0) {
 			this.mvmntSpeed = 0;
-		} 
+		}
+		else if(this.outOfStamina){
+			this.mvmntSpeed = 0;
+		}
 		//checks if the boat should be slowed
 		else if(this.mvmntSpeed > this.maxSpeed/2 && this.slowed){
 			this.mvmntSpeed = this.maxSpeed/2;
@@ -88,7 +94,6 @@ public class Boat extends MovingObject{
 		else if(this.mvmntSpeed > this.maxSpeed) {
 			this.mvmntSpeed = this.maxSpeed;
 		}
-
 		// Sets the boats velocity
 		this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * this.maneuverability);
 	}
@@ -97,6 +102,23 @@ public class Boat extends MovingObject{
 		this.slowed = false;
 		if ((this.getPosition().y)*16 > yMax || (this.getPosition().y)*16 < yMin){
 			this.slowed = true;
+		}
+	}
+
+	public void updateStamina(){
+		if(this.mvmntSpeed > 0){
+			this.stamina -= this.mvmntSpeed / 10;
+		}
+		else{
+			if(stamina < 1000){
+				this.stamina+=10;
+			}
+		}
+		if (this.stamina <= 0){
+			this.outOfStamina = true;
+		}
+		else{
+			this.outOfStamina = false;
 		}
 	}
 }
