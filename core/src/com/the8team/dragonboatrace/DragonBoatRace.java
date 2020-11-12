@@ -31,6 +31,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	Box2DDebugRenderer dr;
 	World world;
 	Player player;
+	Obstacle obj;
 
 	// Sprite rendering
 	SpriteBatch batch;
@@ -61,7 +62,8 @@ public class DragonBoatRace extends ApplicationAdapter {
         startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(700, 340, 48, 16, 100, 10, 1000, 100f, 2.0f, world, "sprites/boat.png");
+		player = new Player(700, 340, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/boat.png");
+		obj = new Obstacle(-3, 0, 2, 1200, 340, 16, 16, 8, false, world, "sprites/boat.png");
 
 		// Create a sprite batch for rendering objects
 		batch = new SpriteBatch();
@@ -129,18 +131,22 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
 		world.step(1/60f, 6, 2);
+
+		// Deletes physics objects which are added to the delete list
 		if(toDelete.size() > 0) {
 			for (MovingObject obj : toDelete) {
 				obj.removeCollision();
-				toDelete.remove(obj);
 			}
+			toDelete.clear();
 		}
 
-		// Checks for player input
+		// Checks for player input & update movements
 		player.inputUpdate(delta);
-
-		//reduces or adds stamina based on movement speed
+		obj.updateMovement();
+    
+    //reduces or adds stamina based on movement speed
 		player.updateStamina();
+
 		
 		//checks if the player is outside the lane
 		player.inLane();

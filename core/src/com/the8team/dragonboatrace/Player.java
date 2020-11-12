@@ -62,6 +62,7 @@ public class Player extends Boat {
 
 	public void updateHealth(int damage) {
 		this.health -= damage;
+		System.out.println(this.health);
 	}
 
 }
