@@ -23,10 +23,10 @@ public class Player extends Boat {
 	 * @param maneuverability
 	 * @param world
 	 */
-	public Player(int x, int y, int width, int height, boolean isStatic, int health,
-					int stamina, float acceleration, float maneuverability, World world) {
-		super(x, y, width, height, isStatic, health, stamina, acceleration, maneuverability, world);
-		this.sprite = new Texture("sprites/boat.png");
+	public Player(int x, int y, int width, int height, int maxSpeed, int health,
+					int stamina, float acceleration, float maneuverability, World world, String textureFile) {
+		super(x, y, width, height, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
+		this.sprite = new Texture(textureFile);
     }
 
 	/**
@@ -58,6 +58,10 @@ public class Player extends Boat {
 		// Uses the updateMovement method
 		this.updateMovement(horizontalForce, verticalForce, delta);
 		
+	}
+
+	public void updateHealth(int damage) {
+		this.health -= damage;
 	}
 
 }

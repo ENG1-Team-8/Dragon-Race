@@ -1,5 +1,7 @@
 package com.the8team.dragonboatrace;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,7 +14,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -36,6 +37,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	// Music
 	Sound startMusic;
+
+	// Objects to delete
+	static ArrayList<MovingObject> toDelete = new ArrayList<MovingObject>();
 	
 	@Override
 	public void create () {
@@ -49,6 +53,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Create a box2d world to hold the objects
 		world = new World(new Vector2(0,0), false);
+		world.setContactListener(new b2ContactListener());
 		dr = new Box2DDebugRenderer();
 
 		// Create music
@@ -56,7 +61,7 @@ public class DragonBoatRace extends ApplicationAdapter {
         startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(128, 128, 32, 16, false, 10, 10, 1f, 2.0f, world);
+		player = new Player(700, 340, 48, 16, 100, 10, 10, 100f, 2.0f, world, "sprites/boat.png");
 
 		// Create a sprite batch for rendering objects
 		batch = new SpriteBatch();
@@ -124,9 +129,18 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
 		world.step(1/60f, 6, 2);
+		if(toDelete.size() > 0) {
+			for (MovingObject obj : toDelete) {
+				obj.removeCollision();
+				toDelete.remove(obj);
+			}
+		}
 
 		// Checks for player input
 		player.inputUpdate(delta);
+		
+		//checks if the player is outside the lane
+		player.inLane();
 
 		// Updates the camera
 		cameraUpdate(delta);
