@@ -62,7 +62,7 @@ public class DragonBoatRace extends ApplicationAdapter {
         startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(700, 340, 48, 16, 100, 10, 10, 5f, 2.0f, world, "sprites/boat.png");
+		player = new Player(700, 340, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/boat.png");
 		obj = new Obstacle(-3, 0, 2, 1200, 340, 16, 16, 8, false, world, "sprites/boat.png");
 
 		// Create a sprite batch for rendering objects
@@ -143,6 +143,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
 		obj.updateMovement();
+    
+    //reduces or adds stamina based on movement speed
+		player.updateStamina();
+
 		
 		//checks if the player is outside the lane
 		player.inLane();
