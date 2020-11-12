@@ -138,6 +138,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Checks for player input
 		player.inputUpdate(delta);
+
+		//reduces or adds stamina based on movement speed
 		player.updateStamina();
 		
 		//checks if the player is outside the lane

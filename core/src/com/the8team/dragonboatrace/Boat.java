@@ -83,6 +83,7 @@ public class Boat extends MovingObject{
 		if(this.mvmntSpeed < 0) {
 			this.mvmntSpeed = 0;
 		}
+		//checks if the boat is out of stamina
 		else if(this.outOfStamina){
 			this.mvmntSpeed = 0;
 		}
@@ -95,9 +96,10 @@ public class Boat extends MovingObject{
 			this.mvmntSpeed = this.maxSpeed;
 		}
 		// Sets the boats velocity
-		this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * this.maneuverability);
+		this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * (this.maneuverability*(stamina/1000)));
 	}
 
+	//checks if a boat is in the correct lane
 	public void inLane(){
 		this.slowed = false;
 		if ((this.getPosition().y)*16 > yMax || (this.getPosition().y)*16 < yMin){
@@ -105,18 +107,23 @@ public class Boat extends MovingObject{
 		}
 	}
 
+	//runs every frame, updates stamina based on movement speed
 	public void updateStamina(){
+		//if movement speed is positive reduce stamina
 		if(this.mvmntSpeed > 0){
 			this.stamina -= this.mvmntSpeed / 10;
 		}
+		//otherwise add stamina but not over max
 		else{
 			if(stamina < 1000){
 				this.stamina+=10;
 			}
 		}
+		//tells updateMovement that the boat is out of stamina
 		if (this.stamina <= 0){
 			this.outOfStamina = true;
 		}
+		//tells updateMovement that the boat has stamina
 		else{
 			this.outOfStamina = false;
 		}
