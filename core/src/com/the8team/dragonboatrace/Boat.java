@@ -14,6 +14,13 @@ public class Boat extends MovingObject{
 	// Time tracking
 	float fastestTime;
 
+	//lane check
+	float yMax;
+	float yMin;
+
+	//is boat slowed
+	Boolean slowed;
+
 	/**
 	 * Constructs a boat object
 	 * 
@@ -40,6 +47,9 @@ public class Boat extends MovingObject{
 		this.stamina = stamina;
 		this.acceleration = acceleration;
 		this.maneuverability = maneuverability;
+		this.yMin = y - 40;
+		this.yMax = y + 40;
+
 	}
 	
 	/**
@@ -69,13 +79,24 @@ public class Boat extends MovingObject{
 		// Stops the boat from going backwards
 		if(this.mvmntSpeed < 0) {
 			this.mvmntSpeed = 0;
-		
+		} 
+		//checks if the boat should be slowed
+		else if(this.mvmntSpeed > this.maxSpeed/2 && this.slowed){
+			this.mvmntSpeed = this.maxSpeed/2;
+		}
 		// Caps the boats maximum speed
-		} else if(this.mvmntSpeed > this.maxSpeed) {
+		else if(this.mvmntSpeed > this.maxSpeed) {
 			this.mvmntSpeed = this.maxSpeed;
 		}
 
 		// Sets the boats velocity
 		this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * this.maneuverability);
+	}
+
+	public void inLane(){
+		this.slowed = false;
+		if ((this.getPosition().y)*16 > yMax || (this.getPosition().y)*16 < yMin){
+			this.slowed = true;
+		}
 	}
 }
