@@ -17,6 +17,8 @@ public class Obstacle extends MovingObject {
 
         super(x, y, width, height, maxSpeed, isStatic, world, textureFile);
         this.damageDealt = damageDealt;
+        this.horizontalVelocity = horizontalVelocity;
+        this.verticalVelocity = verticalVelocity;
 
     }
 
