@@ -21,6 +21,8 @@ public class MovingObject {
 	// Characteristics
 	float mvmntSpeed = 0;
 	float maxSpeed = 5;
+	int initialX;
+	int initialY;
 
 
 	public MovingObject(int x, int y, int width, int height, int maxSpeed, boolean isStatic, World world, String textureFile) {
@@ -29,6 +31,8 @@ public class MovingObject {
         this.bBody = createBox(x, y, width, height, isStatic, world);
         this.sprite = new Texture(textureFile);
 		this.maxSpeed = maxSpeed;
+		this.initialX = x;
+		this.initialY = y;
 		this.bBody.setUserData(this);
 	}
 	

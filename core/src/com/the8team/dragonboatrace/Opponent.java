@@ -22,7 +22,7 @@ public class Opponent extends Boat {
 	 */
 	public Opponent(int x, int y, int width, int height,  int maxSpeed, int health,
 					int stamina, float acceleration, float maneuverability, World world, String textureFile) {
-		super(x, y, width, height, health, maxSpeed, stamina, acceleration, maneuverability, world, "sprites/boat.png");
+		super(x, y, width, height, health, maxSpeed, stamina, acceleration, maneuverability, world, textureFile);
     }
 
     public void move(float delta) {

@@ -50,7 +50,7 @@ public class Boat extends MovingObject{
 		this.stamina = stamina;
 		this.acceleration = acceleration;
 		this.maneuverability = maneuverability;
-		this.yMin = y - 40;
+		this.yMin = y - 56;
 		this.yMax = y + 40;
 		this.outOfStamina = false;
 
@@ -104,6 +104,14 @@ public class Boat extends MovingObject{
 		this.slowed = false;
 		if ((this.getPosition().y)*16 > yMax || (this.getPosition().y)*16 < yMin){
 			this.slowed = true;
+			System.out.println("Out of lane");
+		}
+	}
+
+	public void updateHealth(int damage) {
+		this.health -= damage;
+		if(this.health <= 0) {
+			System.out.println("Boat died");
 		}
 	}
 

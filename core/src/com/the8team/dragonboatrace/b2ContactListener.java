@@ -11,19 +11,13 @@ public class b2ContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Object objectA = contact.getFixtureA().getBody().getUserData();
         Object objectB = contact.getFixtureB().getBody().getUserData();
-        if (objectA instanceof Player) {
-            System.out.println("player col");
-            Player player = (Player) objectA;
-            // if(objectB instanceof obstacle) {
-            // Obstacle ob = (Obstacle) objectB;
-            // player.updateHealth(ob.damage)
-            // DragonBoatRace.toDelete.add(ob);
+        if (objectA instanceof Boat) {
+            System.out.println("boat col");
+            Boat boat = (Boat) objectA;
             if (objectB instanceof Obstacle) {
-
                 Obstacle obj = (Obstacle) objectB;
-                player.updateHealth(obj.damageDealt);
+                boat.updateHealth(obj.damageDealt);
                 DragonBoatRace.toDelete.add(obj);
-
             }
         }
     }
@@ -32,8 +26,8 @@ public class b2ContactListener implements ContactListener {
     public void endContact(Contact contact) {
         Object objectA = contact.getFixtureA().getBody().getUserData();
         Object objectB = contact.getFixtureB().getBody().getUserData();
-        if (objectA instanceof Player || objectB instanceof Player) {
-            System.out.println("player stopped col");
+        if (objectA instanceof Boat || objectB instanceof Boat) {
+            System.out.println("boat stopped col");
         }
     }
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -31,10 +32,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 	Box2DDebugRenderer dr;
 	World world;
 	Player player;
-	Obstacle obj;
+	Opponent[] opponents = new Opponent[5];
+	Obstacle[] obs = new Obstacle[10];
 
 	// Sprite rendering
 	SpriteBatch batch;
+	ShapeRenderer healthBar, staminaBar;
 
 	// Music
 	Sound startMusic;
@@ -62,8 +65,21 @@ public class DragonBoatRace extends ApplicationAdapter {
         startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(700, 340, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/boat.png");
-		obj = new Obstacle(-3, 0, 2, 1200, 340, 16, 16, 8, false, world, "sprites/boat.png");
+		player = new Player(700, 224, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		
+		// Create the opponenets
+		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+
+
+		// Obstacle test
+		for(int i=0;i<9;i++){
+			obs[i] = new Branch(-3, 0, 2, 1200, 340, 64, 16, 8, false, world, "sprites/branch.png");
+		}
+		
 
 		// Create a sprite batch for rendering objects
 		batch = new SpriteBatch();
@@ -74,6 +90,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Parse the tilemap for collision objects/boundaries
 		TiledObjects.parseTiledObjectLayer(world, map.getLayers().get("Collision").getObjects());
+
+		// Create ui elements
+		healthBar = new ShapeRenderer();
+		healthBar.setColor(1, 0, 0, 0);
+		staminaBar = new ShapeRenderer();
+		staminaBar.setColor(0, 1, 0, 0);
 
 	}
 
@@ -93,10 +115,26 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Use draw functions here
 		batch.begin();
 		player.draw(batch);
+
+		//Draw opponents
+		for(int i=0;i<5;i++){
+			opponents[i].draw(batch);
+		}
+
+		// Draw obstacles
+		for(int i=0;i<9;i++){
+			obs[i].draw(batch);
+		}
+
 		batch.end();
+
+		uiUpdate();
+
 
 		// Debug renderer
 		dr.render(world, camera.combined.scl(scale));
+
+
 
 		// Allows game to be quit with escape key
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
@@ -142,9 +180,13 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
-		obj.updateMovement();
+
+		// Obstacle test
+		for(int i=0;i<9;i++){
+			obs[i].updateMovement();
+		}
     
-    //reduces or adds stamina based on movement speed
+    	//reduces or adds stamina based on movement speed
 		player.updateStamina();
 
 		
@@ -179,6 +221,15 @@ public class DragonBoatRace extends ApplicationAdapter {
 		camera.position.set(position);
 
 		camera.update();
+	}
+
+	public void uiUpdate() {
+		healthBar.begin(ShapeRenderer.ShapeType.Filled);
+		healthBar.rect(615, (player.getPosition().y * 16) + 16, player.health*5, 5);
+		healthBar.end();
+		staminaBar.begin(ShapeRenderer.ShapeType.Filled);
+		staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina/20, 5);
+        staminaBar.end();
 	}
 
 
