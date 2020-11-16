@@ -23,6 +23,8 @@ public class MovingObject {
 	float maxSpeed = 5;
 	int initialX;
 	int initialY;
+	int width;
+	int height;
 
 
 	public MovingObject(int x, int y, int width, int height, int maxSpeed, boolean isStatic, World world, String textureFile) {
@@ -33,6 +35,8 @@ public class MovingObject {
 		this.maxSpeed = maxSpeed;
 		this.initialX = x;
 		this.initialY = y;
+		this.width = width;
+		this.height = height;
 		this.bBody.setUserData(this);
 	}
 	
@@ -93,6 +97,18 @@ public class MovingObject {
 		for(Fixture fixture : this.bBody.getFixtureList()) {
 			this.bBody.destroyFixture(fixture);
 		}
+	}
+
+	public void addCollision() {
+		// Sets the shape of the body to be a box polygon
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width/2/scale, height/2/scale);
+
+		// Fixes the box to the body
+		this.bBody.createFixture(shape, 1.0f);
+
+		// Disposes of the used shape
+		shape.dispose();
 	}
 
 }

@@ -44,6 +44,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	// Objects to delete
 	static ArrayList<MovingObject> toDelete = new ArrayList<MovingObject>();
+	static ArrayList<MovingObject> toAdd = new ArrayList<MovingObject>();
 	
 	@Override
 	public void create () {
@@ -169,14 +170,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
 		world.step(1/60f, 6, 2);
-
-		// Deletes physics objects which are added to the delete list
-		if(toDelete.size() > 0) {
-			for (MovingObject obj : toDelete) {
-				obj.removeCollision();
-			}
-			toDelete.clear();
-		}
+		updateCollisionBodies();
 
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
@@ -230,6 +224,24 @@ public class DragonBoatRace extends ApplicationAdapter {
 		staminaBar.begin(ShapeRenderer.ShapeType.Filled);
 		staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina/20, 5);
         staminaBar.end();
+	}
+
+	public void updateCollisionBodies() {
+		// Deletes physics objects which are added to the delete list
+		if(toDelete.size() > 0) {
+			for (MovingObject obj : toDelete) {
+				obj.removeCollision();
+			}
+			toDelete.clear();
+		}
+
+		// Adds physics objects on the toAdd list
+		if(toAdd.size() > 0) {
+			for (MovingObject obj : toAdd) {
+				obj.addCollision();
+			}
+			toAdd.clear();
+		}
 	}
 
 
