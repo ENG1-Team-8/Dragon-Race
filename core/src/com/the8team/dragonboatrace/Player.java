@@ -16,12 +16,13 @@ public class Player extends Boat {
 	 * @param y
 	 * @param width
 	 * @param height
-	 * @param isStatic
+	 * @param maxSpeed
 	 * @param health
 	 * @param stamina
 	 * @param acceleration
 	 * @param maneuverability
 	 * @param world
+	 * @param textureFile
 	 */
 	public Player(int x, int y, int width, int height, int maxSpeed, int health,
 					int stamina, float acceleration, float maneuverability, World world, String textureFile) {

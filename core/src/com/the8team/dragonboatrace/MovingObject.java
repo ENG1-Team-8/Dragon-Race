@@ -20,7 +20,7 @@ public class MovingObject {
 
 	// Characteristics
 	float mvmntSpeed = 0;
-	float maxSpeed = 5;
+	float maxSpeed;
 	int initialX;
 	int initialY;
 	int width;

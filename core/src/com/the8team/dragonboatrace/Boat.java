@@ -18,9 +18,6 @@ public class Boat extends MovingObject{
 	float yMax;
 	float yMin;
 
-	//is boat slowed
-	Boolean slowed;
-
 	//is boat out of stamina
 	Boolean outOfStamina;
 
@@ -87,25 +84,24 @@ public class Boat extends MovingObject{
 		else if(this.outOfStamina){
 			this.mvmntSpeed = 0;
 		}
-		//checks if the boat should be slowed
-		else if(this.mvmntSpeed > this.maxSpeed/2 && this.slowed){
-			this.mvmntSpeed = this.maxSpeed/2;
-		}
 		// Caps the boats maximum speed
 		else if(this.mvmntSpeed > this.maxSpeed) {
 			this.mvmntSpeed = this.maxSpeed;
 		}
-		// Sets the boats velocity
-		this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * (this.maneuverability*(stamina/1000)));
+		// Sets the boats velocity and checks if boat is in its lane
+		if(this.inLane()) {
+			this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * (this.maneuverability*(stamina/1000)));
+		} else {
+			this.bBody.setLinearVelocity(this.mvmntSpeed/2, verticalForce * (this.maneuverability*(stamina/1000)));
+		}
 	}
 
 	//checks if a boat is in the correct lane
-	public void inLane(){
-		this.slowed = false;
+	public boolean inLane(){
 		if ((this.getPosition().y)*16 > yMax || (this.getPosition().y)*16 < yMin){
-			this.slowed = true;
-			System.out.println("Out of lane");
+			return false;
 		}
+		return true;
 	}
 
 	public void updateHealth(int damage) {

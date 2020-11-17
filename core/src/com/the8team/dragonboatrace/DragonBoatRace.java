@@ -63,10 +63,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Create music
 		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
-        startMusic.play(0.2f);
+        //startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(700, 224, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		player = new Player(700, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
 		
 		// Create the opponenets
 		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
@@ -182,10 +182,6 @@ public class DragonBoatRace extends ApplicationAdapter {
     
     	//reduces or adds stamina based on movement speed
 		player.updateStamina();
-
-		
-		//checks if the player is outside the lane
-		player.inLane();
 
 		// Updates the camera
 		cameraUpdate(delta);
