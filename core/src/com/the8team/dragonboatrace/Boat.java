@@ -114,7 +114,7 @@ public class Boat extends MovingObject{
 	//runs every frame, updates stamina based on movement speed
 	public void updateStamina(){
 		//if movement speed is positive reduce stamina
-		if(this.mvmntSpeed > 0){
+		if(this.mvmntSpeed > 5){
 			this.stamina -= this.mvmntSpeed / 10;
 		}
 		//otherwise add stamina but not over max
