@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import java.util.Random;
 
 public class DragonBoatRace extends ApplicationAdapter {
 
@@ -33,7 +34,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 	World world;
 	Player player;
 	Opponent[] opponents = new Opponent[5];
-	Obstacle[] obs = new Obstacle[10];
+	Obstacle[] obs = new Obstacle[50];
+	Obstacle[] lateObs = new Obstacle[10];
 
 	// Sprite rendering
 	SpriteBatch batch;
@@ -45,6 +47,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 	// Objects to delete
 	static ArrayList<MovingObject> toDelete = new ArrayList<MovingObject>();
 	static ArrayList<MovingObject> toAdd = new ArrayList<MovingObject>();
+
+	//ranodm number genertion
+	Random random = new Random();
 	
 	@Override
 	public void create () {
@@ -69,16 +74,21 @@ public class DragonBoatRace extends ApplicationAdapter {
 		player = new Player(700, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
 		
 		// Create the opponenets
-		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
-		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
-		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
-		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
-		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
+		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
 
+		//random obstacle placement
+		//between x:700 and y:16 or y:704
+		for(int i=0;i<50;i++){
+			obs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
+		}
 
-		// Obstacle test
-		for(int i=0;i<9;i++){
-			obs[i] = new Branch(-3, 0, 2, 1200, 340, 64, 16, 8, false, world, "sprites/branch.png");
+		//creation of late game obstacles
+		for(int i=0;i<10;i++){
+			lateObs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 4930+random.nextInt(1410), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
 		}
 		
 
@@ -123,9 +133,15 @@ public class DragonBoatRace extends ApplicationAdapter {
 		}
 
 		// Draw obstacles
-		for(int i=0;i<9;i++){
+		for(int i=0;i<50;i++){
 			obs[i].draw(batch);
 		}
+
+		//late game obstacle
+		for(int i=0;i<10;i++){
+			lateObs[i].draw(batch);
+		}
+		
 
 		batch.end();
 
@@ -175,13 +191,21 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
 
-		// Obstacle test
-		for(int i=0;i<9;i++){
+		// Obstacle movement
+		for(int i=0;i<50;i++){
 			obs[i].updateMovement();
+		}
+
+		//late game obstacle movement
+		if(player.lateGame()){
+			for(int i=0;i<10;i++){
+				lateObs[i].updateMovement();
+			}
 		}
     
     	//reduces or adds stamina based on movement speed
 		player.updateStamina();
+		player.lateGame();
 
 		// Updates the camera
 		cameraUpdate(delta);
