@@ -11,4 +11,10 @@ public class Goose extends Obstacle {
         super(horizontalVel, verticalVel, damageDealt, x, y, width, height, maxSpeed, isStatic, world, textureFile);
 
     }
+
+    public void invertVert() {
+
+        this.setVerticalVel(this.verticalVelocity * -1);
+    }
+
 }

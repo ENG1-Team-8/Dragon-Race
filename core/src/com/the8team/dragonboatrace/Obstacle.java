@@ -9,8 +9,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class Obstacle extends MovingObject {
 
     public int damageDealt;
-    private int horizontalVelocity;
-    private int verticalVelocity;
+    public int horizontalVelocity;
+    public int verticalVelocity;
 
     public Obstacle(int horizontalVelocity, int verticalVelocity, int damageDealt, int x, int y, int width, int height,
             int maxSpeed, boolean isStatic, World world, String textureFile) {
