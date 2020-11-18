@@ -57,6 +57,14 @@ public class Obstacle extends MovingObject {
 
     }
 
+    /**
+     * Function to check if obstacle has left the boundaries of the screen behind
+     * the player and returns a boolean result
+     * 
+     * @param playerX
+     * @return
+     */
+
     public boolean isOffScreen(int playerX) {
 
         float x = this.getPosition().x * DragonBoatRace.scale;
@@ -68,6 +76,35 @@ public class Obstacle extends MovingObject {
         } else {
             return false;
         }
+
+    }
+
+    /**
+     * Reinstante function that takes parameters for position of moved obstacle
+     * 
+     * @param x
+     * @param y
+     */
+
+    public void reinstantiate(int x, int y) {
+
+        this.bBody.getTransform().setPosition(new Vector2((float) x, (float) y));
+
+    }
+
+    /**
+     * Reinstantate function that sets position of obstacle based on position of
+     * player
+     * 
+     * @param playerX
+     */
+
+    public void reinstantiate(int playerX) {
+
+        float screenWidth = Gdx.graphics.getWidth();
+        float newX = (float) playerX + screenWidth / 2 + 4f;
+
+        this.bBody.getTransform().setPosition(new Vector2(newX, this.getPosition().y));
 
     }
 
