@@ -34,9 +34,18 @@ public class b2ContactListener implements ContactListener {
                 if (objectA instanceof Goose) {
 
                     Goose goose = (Goose) obs;
-                    goose.invertVert();
+                    goose.bounce();
 
                 }
+
+            }
+
+        } else if (objectA instanceof ChainShape) {
+
+            if (objectB instanceof Goose) {
+
+                Goose goose = (Goose) objectB;
+                goose.bounce();
 
             }
 
@@ -51,6 +60,7 @@ public class b2ContactListener implements ContactListener {
 
             if (objectB instanceof Obstacle) {
 
+                Boat boat = (Boat) objectA;
                 Obstacle obs = (Obstacle) objectB;
                 DragonBoatRace.toAdd.add(obs);
 
