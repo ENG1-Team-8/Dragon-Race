@@ -29,14 +29,23 @@ public class b2ContactListener implements ContactListener {
                 boat.updateHealth(obs.damageDealt);
                 DragonBoatRace.toDelete.add(obs);
 
-            } else if (objectB instanceof ChainShape) {
+            } else if (contact.getFixtureB().getShape() instanceof ChainShape) {
 
                 if (objectA instanceof Goose) {
 
                     Goose goose = (Goose) obs;
-                    goose.invertVert();
+                    goose.bounce();
 
                 }
+
+            }
+
+        } else if (contact.getFixtureA().getShape() instanceof ChainShape) {
+
+            if (objectB instanceof Goose) {
+
+                Goose goose = (Goose) objectB;
+                goose.bounce();
 
             }
 
