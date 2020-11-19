@@ -45,7 +45,6 @@ public class b2ContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
     }
 
     @Override
