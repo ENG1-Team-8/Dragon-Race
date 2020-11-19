@@ -1,13 +1,14 @@
 package com.the8team.dragonboatrace;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Boat extends MovingObject{
 
 	// Boat characteristics
-    int health;
-    float stamina;
+	int health;
+	int initialHealth;
+	float stamina;
+	float initialStamina;
     float acceleration;
 	float maneuverability;
 
@@ -23,19 +24,22 @@ public class Boat extends MovingObject{
 
 	/**
 	 * Constructs a boat object
-	 * 
+	 * <p>
 	 * Takes a world object to create a box2d body within the world
+	 * @see Player
+	 * @see Opponent
 	 * 
 	 * @param x
 	 * @param y
 	 * @param width
 	 * @param height
-	 * @param isStatic
+	 * @param maxSpeed
 	 * @param health
 	 * @param stamina
 	 * @param acceleration
 	 * @param maneuverability
 	 * @param world
+	 * @param textureFile
 	 */
 	public Boat(int x, int y, int width, int height, int maxSpeed, int health,
 						int stamina, float acceleration, float maneuverability, World world, String textureFile) {
@@ -44,12 +48,13 @@ public class Boat extends MovingObject{
 
 		// Sets other relevant properties
 		this.health = health;
+		this.initialHealth = health;
 		this.stamina = stamina;
+		this.initialStamina = stamina;
 		this.acceleration = acceleration;
 		this.maneuverability = maneuverability;
 		this.yMin = y - 56;
 		this.yMax = y + 40;
-		this.outOfStamina = false;
 
 	}
 
@@ -67,7 +72,7 @@ public class Boat extends MovingObject{
 		this.mvmntSpeed += horizontalForce * (this.acceleration*(stamina/1000)) * delta;
 
 		// Stops the boat from going backwards
-		if(this.mvmntSpeed < 0) {
+		if(this.mvmntSpeed < 0 || this.broken) {
 			this.mvmntSpeed = 0;
 		}
 		//checks if the boat is out of stamina
@@ -98,7 +103,6 @@ public class Boat extends MovingObject{
 		this.health -= damage;
 		if(this.health <= 0) {
 			this.broken = true;
-			DragonBoatRace.toDelete.add(this);
 		}
 	}
 
@@ -132,5 +136,12 @@ public class Boat extends MovingObject{
 			return true;
 		}
 		return false;
+	}
+
+	public void reset() {
+		this.bBody.setTransform(this.initialX/16, this.initialY/16, 0);
+		this.health = initialHealth;
+		this.stamina = initialStamina;
+		this.mvmntSpeed = 0;
 	}
 }

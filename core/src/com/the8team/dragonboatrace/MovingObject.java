@@ -91,24 +91,16 @@ public class MovingObject {
 	 * @return
 	 */
 	public Vector2 getPosition() {
-		return this.bBody.getPosition();
+		if (this.bBody != null) {
+			return this.bBody.getPosition();
+		}
+		return new Vector2(0, 0);
 	}
 	
 	public void removeCollision() {
 		this.bBody.getWorld().destroyBody(this.bBody);
+		this.bBody = null;
 		this.sprite = null;
-	}
-
-	public void addCollision() {
-		// Sets the shape of the body to be a box polygon
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width/2/scale, height/2/scale);
-
-		// Fixes the box to the body
-		this.bBody.createFixture(shape, 1.0f);
-
-		// Disposes of the used shape
-		shape.dispose();
 	}
 
 }
