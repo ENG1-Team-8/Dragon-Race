@@ -12,7 +12,7 @@ public class MovingObject {
 
 	// Game scaling
 	static float scale = 16;
-	
+
 	// Visuals and physics
 	Body bBody;
 	Texture sprite;
@@ -25,20 +25,18 @@ public class MovingObject {
 	int width;
 	int height;
 
-
-	public MovingObject(int x, int y, int width, int height, int maxSpeed, boolean isStatic, World world, String textureFile) {
+	public MovingObject(int x, int y, int width, int height, boolean isStatic, World world, String textureFile) {
 
 		// Creates the box2d body in the game world
-        this.bBody = createBox(x, y, width, height, isStatic, world);
-        this.sprite = new Texture(textureFile);
-		this.maxSpeed = maxSpeed;
+		this.bBody = createBox(x, y, width, height, isStatic, world);
+		this.sprite = new Texture(textureFile);
 		this.initialX = x;
 		this.initialY = y;
 		this.width = width;
 		this.height = height;
 		this.bBody.setUserData(this);
 	}
-	
+
 	/**
 	 * Draws the sprite for the object on screen
 	 * 
@@ -46,26 +44,27 @@ public class MovingObject {
 	 */
 	public void draw(Batch batch) {
 		// Attaches sprite to the bottom left of the body
-		if(this.sprite != null){
-			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
+		if (this.sprite != null) {
+			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2),
+					this.getPosition().y * scale - (this.sprite.getHeight() / 2));
 		}
 	}
 
-    public Body createBox(int x, int y, int width, int height, boolean isStatic, World world) {
+	public Body createBox(int x, int y, int width, int height, boolean isStatic, World world) {
 
 		// Creates a body and body definition (properties for a body)
 		Body body;
 		BodyDef def = new BodyDef();
 
 		// Allows the programmer to define whether a body is static or not
-		if(isStatic) {
+		if (isStatic) {
 			def.type = BodyDef.BodyType.StaticBody;
 		} else {
 			def.type = BodyDef.BodyType.DynamicBody;
 		}
 
 		// Sets the position of the body according to the scale of the game
-		def.position.set(x/scale, y/scale);
+		def.position.set(x / scale, y / scale);
 
 		// Fixes the rotation of the object
 		def.fixedRotation = true;
@@ -75,7 +74,7 @@ public class MovingObject {
 
 		// Sets the shape of the body to be a box polygon
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width/2/scale, height/2/scale);
+		shape.setAsBox(width / 2 / scale, height / 2 / scale);
 
 		// Fixes the box to the body
 		body.createFixture(shape, 1.0f);
@@ -96,7 +95,7 @@ public class MovingObject {
 		}
 		return new Vector2(0, 0);
 	}
-	
+
 	public void removeCollision() {
 		this.bBody.getWorld().destroyBody(this.bBody);
 		this.bBody = null;

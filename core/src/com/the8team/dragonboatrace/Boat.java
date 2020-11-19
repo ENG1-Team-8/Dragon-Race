@@ -16,6 +16,7 @@ public class Boat extends MovingObject {
 	float initialStamina;
 	float acceleration;
 	float maneuverability;
+	int maxSpeed;
 
 	// Time tracking set to initial high value
 	float fastestTime = 10000000;
@@ -52,9 +53,10 @@ public class Boat extends MovingObject {
 			float maneuverability, World world, String textureFile) {
 
 		// Creates a MovingObject with relevant attributes
-		super(x, y, width, height, maxSpeed, false, world, textureFile);
+		super(x, y, width, height, false, world, textureFile);
 
 		// Sets other relevant properties
+		this.maxSpeed = maxSpeed;
 		this.health = health;
 		this.initialHealth = health;
 		this.stamina = stamina;
