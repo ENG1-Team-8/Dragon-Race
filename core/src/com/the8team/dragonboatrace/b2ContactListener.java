@@ -29,23 +29,14 @@ public class b2ContactListener implements ContactListener {
                 boat.updateHealth(obs.damageDealt);
                 DragonBoatRace.toDelete.add(obs);
 
-            } else if (contact.getFixtureB().getShape() instanceof ChainShape) {
+            } else if (objectB instanceof ChainShape) {
 
                 if (objectA instanceof Goose) {
 
                     Goose goose = (Goose) obs;
-                    goose.bounce();
+                    goose.invertVert();
 
                 }
-
-            }
-
-        } else if (contact.getFixtureA().getShape() instanceof ChainShape) {
-
-            if (objectB instanceof Goose) {
-
-                Goose goose = (Goose) objectB;
-                goose.bounce();
 
             }
 
@@ -54,17 +45,7 @@ public class b2ContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-<<<<<<< HEAD
-        Object objectA = contact.getFixtureA().getBody().getUserData();
-        Object objectB = contact.getFixtureB().getBody().getUserData();
-        if (objectA instanceof Boat || objectB instanceof Boat) {
 
-            System.out.println("Boat stopped colliding");
-
-        }
-=======
-
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
     }
 
     @Override
