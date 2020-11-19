@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.steer.SteerableAdapter;
+import com.badlogic.gdx.ai.steer.SteeringAcceleration;
+import com.badlogic.gdx.ai.steer.SteeringBehavior;
+import com.badlogic.gdx.ai.steer.behaviors.*;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +22,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import jdk.vm.ci.code.Location;
+
 import java.util.Random;
 
 public class DragonBoatRace extends ApplicationAdapter {
@@ -34,6 +41,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	World world;
 	Player player;
 	Opponent[] opponents = new Opponent[5];
+	TargetableObject[] finishLine = new TargetableObject[5];
 	Obstacle[] obs = new Obstacle[50];
 	Obstacle[] lateObs = new Obstacle[10];
 
@@ -50,9 +58,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	//ranodm number genertion
 	Random random = new Random();
-	
+
 	@Override
-	public void create () {
+	public void create() {
 		// Get height and width of window for camera
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
@@ -62,35 +70,46 @@ public class DragonBoatRace extends ApplicationAdapter {
 		camera.setToOrtho(false, w, h);
 
 		// Create a box2d world to hold the objects
-		world = new World(new Vector2(0,0), false);
+		world = new World(new Vector2(0, 0), false);
 		world.setContactListener(new b2ContactListener());
 		dr = new Box2DDebugRenderer();
 
 		// Create music
 		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
-        //startMusic.play(0.2f);
+		//startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(700, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
-		
+		player = new Player(700, 240, 48, 16, 100, 10, 1000, 10f, 2.0f, world, "sprites/purple_boat.png");
+
 		// Create the opponenets
-		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 10f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 7f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 9f, 2.0f, world, "sprites/green_boat.png");
 		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 6f, 2.0f, world, "sprites/pink_boat.png");
+		finishLine[0] = new TargetableObject(6376, 124, 16, 90, true, world, "sprites/red_boat.png");
+		finishLine[1] = new TargetableObject(6376, 316, 16, 92, true, world, "sprites/red_boat.png");
+		finishLine[2] = new TargetableObject(6376, 412, 16, 92, true, world, "sprites/red_boat.png");
+		finishLine[3] = new TargetableObject(6376, 508, 16, 92, true, world, "sprites/red_boat.png");
+		finishLine[4] = new TargetableObject(6376, 600, 16, 90, true, world, "sprites/red_boat.png");
+
+		// Create opponent ai
+
+		for (int i = 0; i < 5; i++) {
+			opponents[i].arriveAt(finishLine[i]);
+		}
 
 		//random obstacle placement
 		//between x:700 and y:16 or y:704
-		for(int i=0;i<50;i++){
-			obs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
+		for (int i = 0; i < 50; i++) {
+			obs[i] = new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png", opponents[4]);
 		}
 
 		//creation of late game obstacles
-		for(int i=0;i<10;i++){
-			lateObs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 4930+random.nextInt(1410), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
+		for (int i = 0; i < 10; i++) {
+			lateObs[i] = new Branch(-(1 + random.nextInt(4)), 0, 2, 4930 + random.nextInt(1410), 80 + random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png", opponents[4]);
 		}
-		
+
 
 		// Create a sprite batch for rendering objects
 		batch = new SpriteBatch();
@@ -111,7 +130,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 
 		// Updates game logic
 		update(Gdx.graphics.getDeltaTime());
@@ -128,20 +147,20 @@ public class DragonBoatRace extends ApplicationAdapter {
 		player.draw(batch);
 
 		//Draw opponents
-		for(int i=0;i<5;i++){
+		for (int i = 0; i < 5; i++) {
 			opponents[i].draw(batch);
 		}
 
 		// Draw obstacles
-		for(int i=0;i<50;i++){
+		for (int i = 0; i < 50; i++) {
 			obs[i].draw(batch);
 		}
 
 		//late game obstacle
-		for(int i=0;i<10;i++){
+		for (int i = 0; i < 10; i++) {
 			lateObs[i].draw(batch);
 		}
-		
+
 
 		batch.end();
 
@@ -152,9 +171,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 		dr.render(world, camera.combined.scl(scale));
 
 
-
 		// Allows game to be quit with escape key
-		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 	}
 
 	// Potential resize function if game brief changes
@@ -162,12 +180,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 	//public void resize(int width, int height) {
 	//	camera.setToOrtho(false, width, height);
 	//}
-	
+
 	/**
 	 * Disposes of objects for efficiency
 	 */
 	@Override
-	public void dispose () {
+	public void dispose() {
 		world.dispose();
 		dr.dispose();
 		batch.dispose();
@@ -178,91 +196,94 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	/**
 	 * Updates the game logic
-	 * 
+	 *
 	 * @param delta
 	 */
 	public void update(float delta) {
 
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
-		world.step(1/60f, 6, 2);
+		world.step(1 / 60f, 6, 2);
 		updateCollisionBodies();
 
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
 
-		// Obstacle movement
-		for(int i=0;i<50;i++){
-			obs[i].updateMovement();
+		//update opponents' positions
+		for (Opponent opponent : opponents) {
+			opponent.update(delta);
 		}
 
-		//late game obstacle movement
-		if(player.lateGame()){
-			for(int i=0;i<10;i++){
-				lateObs[i].updateMovement();
+			// Obstacle movement
+			for (int i = 0; i < 50; i++) {
+				obs[i].updateMovement();
+			}
+
+			//late game obstacle movement
+			if (player.lateGame()) {
+				for (int i = 0; i < 10; i++) {
+					lateObs[i].updateMovement();
+				}
+			}
+
+			//reduces or adds stamina based on movement speed
+			player.updateStamina();
+			player.lateGame();
+
+			// Updates the camera
+			cameraUpdate(delta);
+			tmr.setView(camera);
+
+			// Updates the projection matrix for the sprite batch
+			batch.setProjectionMatrix(camera.combined);
+
+		}
+
+
+		/**
+		 * Updates the camera
+		 *
+		 * Tracks the players x-position and keeps the full height of the map in frame
+		 *
+		 * @param delta
+		 */
+		public void cameraUpdate ( float delta){
+			Vector3 position = camera.position;
+
+			// Take the players position correctly scaled
+			position.x = player.getPosition().x * scale;
+
+			// Follow the y-centre of the map
+			position.y = 720 / 2;
+			camera.position.set(position);
+
+			camera.update();
+		}
+
+		public void uiUpdate () {
+			healthBar.begin(ShapeRenderer.ShapeType.Filled);
+			healthBar.rect(615, (player.getPosition().y * 16) + 16, player.health * 5, 5);
+			healthBar.end();
+			staminaBar.begin(ShapeRenderer.ShapeType.Filled);
+			staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina / 20, 5);
+			staminaBar.end();
+		}
+
+		public void updateCollisionBodies () {
+			// Deletes physics objects which are added to the delete list
+			if (toDelete.size() > 0) {
+				for (MovingObject obj : toDelete) {
+					obj.removeCollision();
+				}
+				toDelete.clear();
+			}
+
+			// Adds physics objects on the toAdd list
+			if (toAdd.size() > 0) {
+				for (MovingObject obj : toAdd) {
+					obj.addCollision();
+				}
+				toAdd.clear();
 			}
 		}
-    
-    	//reduces or adds stamina based on movement speed
-		player.updateStamina();
-		player.lateGame();
-
-		// Updates the camera
-		cameraUpdate(delta);
-		tmr.setView(camera);
-
-		// Updates the projection matrix for the sprite batch
-		batch.setProjectionMatrix(camera.combined);
-
 	}
-
-
-	/**
-	 * Updates the camera
-	 * 
-	 * Tracks the players x-position and keeps the full height of the map in frame
-	 * 
-	 * @param delta
-	 */
-	public void cameraUpdate(float delta) {
-		Vector3 position = camera.position;
-
-		// Take the players position correctly scaled
-		position.x = player.getPosition().x * scale;
-
-		// Follow the y-centre of the map
-		position.y = 720/2;
-		camera.position.set(position);
-
-		camera.update();
-	}
-
-	public void uiUpdate() {
-		healthBar.begin(ShapeRenderer.ShapeType.Filled);
-		healthBar.rect(615, (player.getPosition().y * 16) + 16, player.health*5, 5);
-		healthBar.end();
-		staminaBar.begin(ShapeRenderer.ShapeType.Filled);
-		staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina/20, 5);
-        staminaBar.end();
-	}
-
-	public void updateCollisionBodies() {
-		// Deletes physics objects which are added to the delete list
-		if(toDelete.size() > 0) {
-			for (MovingObject obj : toDelete) {
-				obj.removeCollision();
-			}
-			toDelete.clear();
-		}
-
-		// Adds physics objects on the toAdd list
-		if(toAdd.size() > 0) {
-			for (MovingObject obj : toAdd) {
-				obj.addCollision();
-			}
-			toAdd.clear();
-		}
-	}
-
-
-}
