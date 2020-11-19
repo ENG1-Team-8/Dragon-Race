@@ -45,18 +45,7 @@ public class b2ContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-        Object objectA = contact.getFixtureA().getBody().getUserData();
-        Object objectB = contact.getFixtureB().getBody().getUserData();
-        if (objectA instanceof Boat) {
 
-            if (objectB instanceof Obstacle) {
-
-                Obstacle obs = (Obstacle) objectB;
-                DragonBoatRace.toAdd.add(obs);
-
-            }
-
-        }
     }
 
     @Override

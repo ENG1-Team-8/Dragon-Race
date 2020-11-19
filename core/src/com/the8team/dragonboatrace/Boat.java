@@ -12,14 +12,14 @@ public class Boat extends MovingObject{
 	float maneuverability;
 
 	// Time tracking
-	float fastestTime;
+	float fastestTime = 10000000;
 
 	//lane check
 	float yMax;
 	float yMin;
 
-	//is boat out of stamina
-	Boolean outOfStamina;
+	// Booleans
+	Boolean outOfStamina= false, broken = false;
 
 	/**
 	 * Constructs a boat object
@@ -51,16 +51,6 @@ public class Boat extends MovingObject{
 		this.yMax = y + 40;
 		this.outOfStamina = false;
 
-	}
-	
-	/**
-	 * Draws the sprite for the boat on screen
-	 * 
-	 * @param batch
-	 */
-	public void draw(Batch batch) {
-		// Attaches sprite to the bottom left of the boats body
-		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
 	}
 
 	/**
@@ -107,7 +97,8 @@ public class Boat extends MovingObject{
 	public void updateHealth(int damage) {
 		this.health -= damage;
 		if(this.health <= 0) {
-			System.out.println("Boat died");
+			this.broken = true;
+			DragonBoatRace.toDelete.add(this);
 		}
 	}
 
@@ -131,5 +122,15 @@ public class Boat extends MovingObject{
 		else{
 			this.outOfStamina = false;
 		}
+	}
+
+	public boolean isFinished(float timer) {
+		if (this.getPosition().x * DragonBoatRace.scale > 6320) {
+			if (timer < this.fastestTime) {
+				this.fastestTime = timer;
+			}
+			return true;
+		}
+		return false;
 	}
 }

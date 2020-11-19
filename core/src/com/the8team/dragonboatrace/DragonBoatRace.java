@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+
 import java.util.Random;
 
 public class DragonBoatRace extends ApplicationAdapter {
@@ -34,12 +36,17 @@ public class DragonBoatRace extends ApplicationAdapter {
 	World world;
 	Player player;
 	Opponent[] opponents = new Opponent[5];
-	Obstacle[] obs = new Obstacle[50];
+	ArrayList<Obstacle> obs = new ArrayList<Obstacle>();
 	Obstacle[] lateObs = new Obstacle[10];
 
 	// Sprite rendering
 	SpriteBatch batch;
 	ShapeRenderer healthBar, staminaBar;
+	Texture brokenScreen;
+
+	// Leg counting and timing
+	static int leg = 1;
+	float timer;
 
 	// Music
 	Sound startMusic;
@@ -53,7 +60,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		
 		// Get height and width of window for camera
+		Gdx.graphics.setWindowedMode(1280, 720);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
@@ -71,19 +80,19 @@ public class DragonBoatRace extends ApplicationAdapter {
         //startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(700, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		player = new Player(720, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
 		
 		// Create the opponenets
-		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
-		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		opponents[0] = new Opponent(720, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(720, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(720, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[3] = new Opponent(720, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
+		opponents[4] = new Opponent(720, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
 
 		//random obstacle placement
 		//between x:700 and y:16 or y:704
 		for(int i=0;i<50;i++){
-			obs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
+			obs.add(new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
 		}
 
 		//creation of late game obstacles
@@ -108,10 +117,58 @@ public class DragonBoatRace extends ApplicationAdapter {
 		staminaBar = new ShapeRenderer();
 		staminaBar.setColor(0, 1, 0, 0);
 
+		// Create the brokenScreen screen
+		brokenScreen = new Texture("screens/brokenScreen.png");
+
+		// Set the leg number and timer
+		leg = 0;
+		timer = 0f;
+
+	}
+
+	public void reset(){
+
+		// for(int i=0;i<50;i++){
+		// 	toDelete.add(obs[i]);
+		// 	obs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
+		// }
+
+		// for(int i=0;i<10;i++){
+		// 	toDelete.add(lateObs[i]);
+		// 	lateObs[i] = new Branch(-(1+random.nextInt(4)),0, 2, 4930+random.nextInt(1410), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png");
+		// }
+
+		for (Obstacle obstacle : obs) {
+			toDelete.add(obstacle);
+		}
+
+		obs.clear();
+
+		for(int i=0;i<50;i++){
+			obs.add(new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+		}
+
+		player.bBody.setTransform(player.initialX/16, player.initialY/16, 0);
+
+		timer = 0f;
 	}
 
 	@Override
 	public void render () {
+
+		if(timer > 5f){
+			reset();
+			return;
+		}
+
+		// Checks if the player has broken their boat and displays broken screen
+		if(player.broken){
+			batch.begin();
+			batch.draw(brokenScreen, camera.position.x - (1280/2), camera.position.y - (720/2));
+			batch.end();
+			if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) create();
+			return;
+		}
 
 		// Updates game logic
 		update(Gdx.graphics.getDeltaTime());
@@ -120,6 +177,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		tmr.render();
 
 		// Uses sprite batch to render object textures
@@ -134,7 +192,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Draw obstacles
 		for(int i=0;i<50;i++){
-			obs[i].draw(batch);
+			obs.get(i).draw(batch);
 		}
 
 		//late game obstacle
@@ -188,12 +246,16 @@ public class DragonBoatRace extends ApplicationAdapter {
 		world.step(1/60f, 6, 2);
 		updateCollisionBodies();
 
+		// Increments timer
+		timer += delta;
+		System.out.println(timer);
+
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
 
 		// Obstacle movement
 		for(int i=0;i<50;i++){
-			obs[i].updateMovement();
+			obs.get(i).updateMovement();
 		}
 
 		//late game obstacle movement
@@ -206,6 +268,7 @@ public class DragonBoatRace extends ApplicationAdapter {
     	//reduces or adds stamina based on movement speed
 		player.updateStamina();
 		player.lateGame();
+		updateLeg(timer);
 
 		// Updates the camera
 		cameraUpdate(delta);
@@ -261,6 +324,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 				obj.addCollision();
 			}
 			toAdd.clear();
+		}
+	}
+
+	public void updateLeg(float timer) {
+		if (player.isFinished(timer)){
+			System.out.println(player.fastestTime);
 		}
 	}
 

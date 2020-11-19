@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -47,7 +46,9 @@ public class MovingObject {
 	 */
 	public void draw(Batch batch) {
 		// Attaches sprite to the bottom left of the body
-		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
+		if(this.sprite != null){
+			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
+		}
 	}
 
     public Body createBox(int x, int y, int width, int height, boolean isStatic, World world) {
@@ -94,9 +95,8 @@ public class MovingObject {
 	}
 	
 	public void removeCollision() {
-		for(Fixture fixture : this.bBody.getFixtureList()) {
-			this.bBody.destroyFixture(fixture);
-		}
+		this.bBody.getWorld().destroyBody(this.bBody);
+		this.sprite = null;
 	}
 
 	public void addCollision() {
