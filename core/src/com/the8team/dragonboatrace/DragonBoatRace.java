@@ -55,10 +55,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	// Random number genertion
 	Random random = new Random();
-	
+
 	@Override
-	public void create () {
-		
+	public void create() {
+
 		// Get height and width of window for camera
 		Gdx.graphics.setWindowedMode(1280, 720);
 		float w = Gdx.graphics.getWidth();
@@ -72,17 +72,17 @@ public class DragonBoatRace extends ApplicationAdapter {
 		leg = 1;
 
 		// Create a box2d world to hold the objects
-		world = new World(new Vector2(0,0), false);
+		world = new World(new Vector2(0, 0), false);
 		world.setContactListener(new b2ContactListener());
 		dr = new Box2DDebugRenderer();
 
 		// Create music
 		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
-        //startMusic.play(0.2f);
+		// startMusic.play(0.2f);
 
 		// Create the player
 		player = new Player(720, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
-		
+
 		// Create the opponenets
 		opponents = new Opponent[5];
 		opponents[0] = new Opponent(720, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
@@ -97,15 +97,16 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Random obstacle placement
 		// Between x:700 and y:16 or y:704
-		for(int i=0;i<25 * leg;i++){
-			obs.add(new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+		for (int i = 0; i < 25 * leg; i++) {
+			obs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561),
+					64, 16, 8, false, world, "sprites/branch.png"));
 		}
 
 		// Creation of late game obstacles
-		for(int i=0;i<10 * leg;i++){
-			lateObs.add(new Branch(-(1+random.nextInt(4)),0, 2, 4930+random.nextInt(1410), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+		for (int i = 0; i < 10 * leg; i++) {
+			lateObs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 4930 + random.nextInt(1410),
+					80 + random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
 		}
-		
 
 		// Create a sprite batch for rendering objects
 		batch = new SpriteBatch();
@@ -132,7 +133,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	}
 
-	public void reset(){
+	public void reset() {
 
 		player.reset();
 		for (Opponent opponent : opponents) {
@@ -144,21 +145,22 @@ public class DragonBoatRace extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 
-		if(leg == 3){
+		if (leg == 3) {
 			batch.begin();
-			batch.draw(endScreen, camera.position.x - (1280/2), camera.position.y - (720/2));
+			batch.draw(endScreen, camera.position.x - (1280 / 2), camera.position.y - (720 / 2));
 			batch.end();
 			return;
 		}
 
 		// Checks if the player has broken their boat and displays broken screen
-		if(player.broken){
+		if (player.broken) {
 			batch.begin();
-			batch.draw(brokenScreen, camera.position.x - (1280/2), camera.position.y - (720/2));
+			batch.draw(brokenScreen, camera.position.x - (1280 / 2), camera.position.y - (720 / 2));
 			batch.end();
-			if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) create();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER))
+				create();
 			return;
 		}
 
@@ -176,12 +178,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 		batch.begin();
 
 		// Draw obstacles
-		for(Obstacle obstacle : obs){
+		for (Obstacle obstacle : obs) {
 			obstacle.draw(batch);
 		}
 
-		//late game obstacle
-		for(Obstacle obstacle : lateObs){
+		// late game obstacle
+		for (Obstacle obstacle : lateObs) {
 			obstacle.draw(batch);
 		}
 
@@ -189,7 +191,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		player.draw(batch);
 
 		// Draw opponents
-		for(int i=0;i<5;i++){
+		for (int i = 0; i < 5; i++) {
 			opponents[i].draw(batch);
 		}
 
@@ -202,9 +204,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 		dr.render(world, camera.combined.scl(scale));
 
 		// Allows game to be quit with escape key
-		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+			Gdx.app.exit();
 	}
-
 
 	/**
 	 * Updates the game logic
@@ -215,7 +217,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Takes a time step for the collisions detection, physics etc.
 		// Should *NOT* use delta as time step, should be constant (target framerate)
-		world.step(1/60f, 6, 2);
+		world.step(1 / 60f, 6, 2);
 		updateCollisionBodies();
 
 		// Increments timer
@@ -225,18 +227,18 @@ public class DragonBoatRace extends ApplicationAdapter {
 		player.inputUpdate(delta);
 
 		// Obstacle movement
-		for(Obstacle obstacle : obs){
+		for (Obstacle obstacle : obs) {
 			obstacle.updateMovement();
 		}
 
 		// Late game obstacle movement
-		if(player.lateGame()){
-			for(Obstacle obstacle : lateObs){
+		if (player.lateGame()) {
+			for (Obstacle obstacle : lateObs) {
 				obstacle.updateMovement();
 			}
 		}
-    
-    	// Reduces or adds stamina based on movement speed
+
+		// Reduces or adds stamina based on movement speed
 		player.updateStamina();
 
 		// Updates the leg
@@ -250,7 +252,6 @@ public class DragonBoatRace extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 
 	}
-
 
 	/**
 	 * Updates the camera
@@ -266,7 +267,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		position.x = player.getPosition().x * scale;
 
 		// Follow the y-centre of the map
-		position.y = 720/2;
+		position.y = 720 / 2;
 		camera.position.set(position);
 
 		camera.update();
@@ -274,16 +275,16 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	public void uiUpdate() {
 		healthBar.begin(ShapeRenderer.ShapeType.Filled);
-		healthBar.rect(615, (player.getPosition().y * 16) + 16, player.health*5, 5);
+		healthBar.rect(615, (player.getPosition().y * 16) + 16, player.health * 5, 5);
 		healthBar.end();
 		staminaBar.begin(ShapeRenderer.ShapeType.Filled);
-		staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina/20, 5);
-        staminaBar.end();
+		staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina / 20, 5);
+		staminaBar.end();
 	}
 
 	public void updateCollisionBodies() {
 		// Deletes physics objects which are added to the delete list
-		if(toDelete.size() > 0) {
+		if (toDelete.size() > 0) {
 			for (MovingObject obj : toDelete) {
 				obj.removeCollision();
 			}
@@ -295,13 +296,13 @@ public class DragonBoatRace extends ApplicationAdapter {
 		if (leg == 1) {
 			timer = 10000;
 		} else if (leg == 2) {
-			if (player.isFinished(timer)){
+			if (player.isFinished(timer)) {
 				System.out.println("final time: " + player.fastestTime);
 				leg += 1;
 				return;
 			}
 		}
-		if (player.isFinished(timer)){
+		if (player.isFinished(timer)) {
 			System.out.println(player.fastestTime);
 			leg += 1;
 			reset();
@@ -311,13 +312,13 @@ public class DragonBoatRace extends ApplicationAdapter {
 	public void resetObstacles() {
 
 		for (Obstacle obstacle : obs) {
-			if(obstacle.bBody != null) {
+			if (obstacle.bBody != null) {
 				obstacle.removeCollision();
 			}
 		}
 
 		for (Obstacle obstacle : lateObs) {
-			if(obstacle.bBody != null) {
+			if (obstacle.bBody != null) {
 				obstacle.removeCollision();
 			}
 		}
@@ -325,12 +326,14 @@ public class DragonBoatRace extends ApplicationAdapter {
 		obs.clear();
 		lateObs.clear();
 
-		for(int i=0;i<25 * leg;i++){
-			obs.add(new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+		for (int i = 0; i < 25 * leg; i++) {
+			obs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561),
+					64, 16, 8, false, world, "sprites/branch.png"));
 		}
 
-		for(int i=0;i<10 * leg;i++){
-			lateObs.add(new Branch(-(1+random.nextInt(4)),0, 2, 1000+random.nextInt(5340), 80+random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+		for (int i = 0; i < 10 * leg; i++) {
+			lateObs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340),
+					80 + random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
 		}
 	}
 
@@ -338,7 +341,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	 * Disposes of objects for efficiency
 	 */
 	@Override
-	public void dispose () {
+	public void dispose() {
 		world.dispose();
 		dr.dispose();
 		batch.dispose();
