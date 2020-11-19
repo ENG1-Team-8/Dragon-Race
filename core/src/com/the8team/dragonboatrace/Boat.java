@@ -6,15 +6,10 @@ public class Boat extends MovingObject {
 
 	// Boat characteristics
 	int health;
-<<<<<<< HEAD
-	float stamina;
-	float acceleration;
-=======
 	int initialHealth;
 	float stamina;
 	float initialStamina;
-    float acceleration;
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
+	float acceleration;
 	float maneuverability;
 
 	// Time tracking
@@ -24,18 +19,14 @@ public class Boat extends MovingObject {
 	float yMax;
 	float yMin;
 
-<<<<<<< HEAD
-	// is boat out of stamina
-	Boolean outOfStamina;
-=======
 	// Booleans
-	Boolean outOfStamina= false, broken = false;
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
+	Boolean outOfStamina = false, broken = false;
 
 	/**
 	 * Constructs a boat object
 	 * <p>
 	 * Takes a world object to create a box2d body within the world
+	 * 
 	 * @see Player
 	 * @see Opponent
 	 * 
@@ -67,20 +58,6 @@ public class Boat extends MovingObject {
 		this.yMax = y + 40;
 
 	}
-<<<<<<< HEAD
-
-	/**
-	 * Draws the sprite for the boat on screen
-	 * 
-	 * @param batch
-	 */
-	public void draw(Batch batch) {
-		// Attaches sprite to the bottom left of the boats body
-		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2),
-				this.getPosition().y * scale - (this.sprite.getHeight() / 2));
-	}
-=======
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 
 	/**
 	 * Updates the movement properties of the boat
@@ -97,11 +74,7 @@ public class Boat extends MovingObject {
 		this.mvmntSpeed += horizontalForce * (this.acceleration * (stamina / 1000)) * delta;
 
 		// Stops the boat from going backwards
-<<<<<<< HEAD
-		if (this.mvmntSpeed < 0) {
-=======
-		if(this.mvmntSpeed < 0 || this.broken) {
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
+		if (this.mvmntSpeed < 0 || this.broken) {
 			this.mvmntSpeed = 0;
 		}
 		// checks if the boat is out of stamina
@@ -131,13 +104,8 @@ public class Boat extends MovingObject {
 
 	public void updateHealth(int damage) {
 		this.health -= damage;
-<<<<<<< HEAD
 		if (this.health <= 0) {
-			System.out.println("Boat died");
-=======
-		if(this.health <= 0) {
 			this.broken = true;
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 		}
 	}
 
@@ -174,7 +142,7 @@ public class Boat extends MovingObject {
 	}
 
 	public void reset() {
-		this.bBody.setTransform(this.initialX/16, this.initialY/16, 0);
+		this.bBody.setTransform(this.initialX / 16, this.initialY / 16, 0);
 		this.health = initialHealth;
 		this.stamina = initialStamina;
 		this.mvmntSpeed = 0;
