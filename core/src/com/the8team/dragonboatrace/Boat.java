@@ -1,41 +1,55 @@
 package com.the8team.dragonboatrace;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Boat extends MovingObject {
 
 	// Boat characteristics
 	int health;
+<<<<<<< HEAD
 	float stamina;
 	float acceleration;
+=======
+	int initialHealth;
+	float stamina;
+	float initialStamina;
+    float acceleration;
+>>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 	float maneuverability;
 
 	// Time tracking
-	float fastestTime;
+	float fastestTime = 10000000;
 
 	// lane check
 	float yMax;
 	float yMin;
 
+<<<<<<< HEAD
 	// is boat out of stamina
 	Boolean outOfStamina;
+=======
+	// Booleans
+	Boolean outOfStamina= false, broken = false;
+>>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 
 	/**
 	 * Constructs a boat object
-	 * 
+	 * <p>
 	 * Takes a world object to create a box2d body within the world
+	 * @see Player
+	 * @see Opponent
 	 * 
 	 * @param x
 	 * @param y
 	 * @param width
 	 * @param height
-	 * @param isStatic
+	 * @param maxSpeed
 	 * @param health
 	 * @param stamina
 	 * @param acceleration
 	 * @param maneuverability
 	 * @param world
+	 * @param textureFile
 	 */
 	public Boat(int x, int y, int width, int height, int maxSpeed, int health, int stamina, float acceleration,
 			float maneuverability, World world, String textureFile) {
@@ -44,14 +58,16 @@ public class Boat extends MovingObject {
 
 		// Sets other relevant properties
 		this.health = health;
+		this.initialHealth = health;
 		this.stamina = stamina;
+		this.initialStamina = stamina;
 		this.acceleration = acceleration;
 		this.maneuverability = maneuverability;
 		this.yMin = y - 56;
 		this.yMax = y + 40;
-		this.outOfStamina = false;
 
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Draws the sprite for the boat on screen
@@ -63,6 +79,8 @@ public class Boat extends MovingObject {
 		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2),
 				this.getPosition().y * scale - (this.sprite.getHeight() / 2));
 	}
+=======
+>>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 
 	/**
 	 * Updates the movement properties of the boat
@@ -79,7 +97,11 @@ public class Boat extends MovingObject {
 		this.mvmntSpeed += horizontalForce * (this.acceleration * (stamina / 1000)) * delta;
 
 		// Stops the boat from going backwards
+<<<<<<< HEAD
 		if (this.mvmntSpeed < 0) {
+=======
+		if(this.mvmntSpeed < 0 || this.broken) {
+>>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 			this.mvmntSpeed = 0;
 		}
 		// checks if the boat is out of stamina
@@ -109,8 +131,13 @@ public class Boat extends MovingObject {
 
 	public void updateHealth(int damage) {
 		this.health -= damage;
+<<<<<<< HEAD
 		if (this.health <= 0) {
 			System.out.println("Boat died");
+=======
+		if(this.health <= 0) {
+			this.broken = true;
+>>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 		}
 	}
 
@@ -134,5 +161,22 @@ public class Boat extends MovingObject {
 		else {
 			this.outOfStamina = false;
 		}
+	}
+
+	public boolean isFinished(float timer) {
+		if (this.getPosition().x * DragonBoatRace.scale > 6320) {
+			if (timer < this.fastestTime) {
+				this.fastestTime = timer;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void reset() {
+		this.bBody.setTransform(this.initialX/16, this.initialY/16, 0);
+		this.health = initialHealth;
+		this.stamina = initialStamina;
+		this.mvmntSpeed = 0;
 	}
 }

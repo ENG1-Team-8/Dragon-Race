@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -47,7 +46,9 @@ public class MovingObject {
 	 */
 	public void draw(Batch batch) {
 		// Attaches sprite to the bottom left of the body
-		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
+		if(this.sprite != null){
+			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
+		}
 	}
 
     public Body createBox(int x, int y, int width, int height, boolean isStatic, World world) {
@@ -90,25 +91,16 @@ public class MovingObject {
 	 * @return
 	 */
 	public Vector2 getPosition() {
-		return this.bBody.getPosition();
+		if (this.bBody != null) {
+			return this.bBody.getPosition();
+		}
+		return new Vector2(0, 0);
 	}
 	
 	public void removeCollision() {
-		for(Fixture fixture : this.bBody.getFixtureList()) {
-			this.bBody.destroyFixture(fixture);
-		}
-	}
-
-	public void addCollision() {
-		// Sets the shape of the body to be a box polygon
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width/2/scale, height/2/scale);
-
-		// Fixes the box to the body
-		this.bBody.createFixture(shape, 1.0f);
-
-		// Disposes of the used shape
-		shape.dispose();
+		this.bBody.getWorld().destroyBody(this.bBody);
+		this.bBody = null;
+		this.sprite = null;
 	}
 
 }

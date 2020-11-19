@@ -54,6 +54,7 @@ public class b2ContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+<<<<<<< HEAD
         Object objectA = contact.getFixtureA().getBody().getUserData();
         Object objectB = contact.getFixtureB().getBody().getUserData();
         if (objectA instanceof Boat || objectB instanceof Boat) {
@@ -61,6 +62,9 @@ public class b2ContactListener implements ContactListener {
             System.out.println("Boat stopped colliding");
 
         }
+=======
+
+>>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
     }
 
     @Override

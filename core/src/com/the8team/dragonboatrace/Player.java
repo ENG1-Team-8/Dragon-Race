@@ -64,7 +64,7 @@ public class Player extends Boat {
 	//as all of the obstacles move there ends up not being any at the end
 	//this detects when the player is near the end to spawn new obstacles
 	public Boolean lateGame(){
-		if(this.getPosition().x > 4930){
+		if(this.getPosition().x * DragonBoatRace.scale > 4930){
 			return true;
 		}
 		else{
