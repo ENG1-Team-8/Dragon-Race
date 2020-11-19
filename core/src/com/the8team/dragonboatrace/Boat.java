@@ -2,35 +2,25 @@ package com.the8team.dragonboatrace;
 
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Boat extends MovingObject {
+public class Boat extends MovingObject{
 
 	// Boat characteristics
 	int health;
-<<<<<<< HEAD
-	float stamina;
-	float acceleration;
-=======
 	int initialHealth;
 	float stamina;
 	float initialStamina;
     float acceleration;
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 	float maneuverability;
 
 	// Time tracking
 	float fastestTime = 10000000;
 
-	// lane check
+	//lane check
 	float yMax;
 	float yMin;
 
-<<<<<<< HEAD
-	// is boat out of stamina
-	Boolean outOfStamina;
-=======
 	// Booleans
 	Boolean outOfStamina= false, broken = false;
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 
 	/**
 	 * Constructs a boat object
@@ -51,8 +41,8 @@ public class Boat extends MovingObject {
 	 * @param world
 	 * @param textureFile
 	 */
-	public Boat(int x, int y, int width, int height, int maxSpeed, int health, int stamina, float acceleration,
-			float maneuverability, World world, String textureFile) {
+	public Boat(int x, int y, int width, int height, int maxSpeed, int health,
+						int stamina, float acceleration, float maneuverability, World world, String textureFile) {
 
 		super(x, y, width, height, maxSpeed, false, world, textureFile);
 
@@ -67,26 +57,11 @@ public class Boat extends MovingObject {
 		this.yMax = y + 40;
 
 	}
-<<<<<<< HEAD
-
-	/**
-	 * Draws the sprite for the boat on screen
-	 * 
-	 * @param batch
-	 */
-	public void draw(Batch batch) {
-		// Attaches sprite to the bottom left of the boats body
-		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2),
-				this.getPosition().y * scale - (this.sprite.getHeight() / 2));
-	}
-=======
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 
 	/**
 	 * Updates the movement properties of the boat
 	 * 
-	 * The forces take values 1 or 0 typically to represent whether or not a force
-	 * is being applied
+	 * The forces take values 1 or 0 typically to represent whether or not a force is being applied
 	 * 
 	 * @param horizontalForce
 	 * @param verticalForce
@@ -94,36 +69,31 @@ public class Boat extends MovingObject {
 	 */
 	public void updateMovement(int horizontalForce, int verticalForce, float delta) {
 		// Accelerates the boat over a set time regardless of framerate
-		this.mvmntSpeed += horizontalForce * (this.acceleration * (stamina / 1000)) * delta;
+		this.mvmntSpeed += horizontalForce * (this.acceleration*(stamina/1000)) * delta;
 
 		// Stops the boat from going backwards
-<<<<<<< HEAD
-		if (this.mvmntSpeed < 0) {
-=======
 		if(this.mvmntSpeed < 0 || this.broken) {
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 			this.mvmntSpeed = 0;
 		}
-		// checks if the boat is out of stamina
-		else if (this.outOfStamina) {
+		//checks if the boat is out of stamina
+		else if(this.outOfStamina){
 			this.mvmntSpeed = 0;
 		}
 		// Caps the boats maximum speed
-		else if (this.mvmntSpeed > this.maxSpeed) {
+		else if(this.mvmntSpeed > this.maxSpeed) {
 			this.mvmntSpeed = this.maxSpeed;
 		}
 		// Sets the boats velocity and checks if boat is in its lane
-		if (this.inLane()) {
-			this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * (this.maneuverability * (stamina / 1000)));
+		if(this.inLane()) {
+			this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * (this.maneuverability*(stamina/1000)));
 		} else {
-			this.bBody.setLinearVelocity(this.mvmntSpeed / 2,
-					verticalForce * (this.maneuverability * (stamina / 1000)));
+			this.bBody.setLinearVelocity(this.mvmntSpeed/2, verticalForce * (this.maneuverability*(stamina/1000)));
 		}
 	}
 
-	// checks if a boat is in the correct lane
-	public boolean inLane() {
-		if ((this.getPosition().y) * 16 > yMax || (this.getPosition().y) * 16 < yMin) {
+	//checks if a boat is in the correct lane
+	public boolean inLane(){
+		if ((this.getPosition().y)*16 > yMax || (this.getPosition().y)*16 < yMin){
 			return false;
 		}
 		return true;
@@ -131,34 +101,29 @@ public class Boat extends MovingObject {
 
 	public void updateHealth(int damage) {
 		this.health -= damage;
-<<<<<<< HEAD
-		if (this.health <= 0) {
-			System.out.println("Boat died");
-=======
 		if(this.health <= 0) {
 			this.broken = true;
->>>>>>> f5e4d98704ee7f6232ebed53f43e20469f0decde
 		}
 	}
 
-	// runs every frame, updates stamina based on movement speed
-	public void updateStamina() {
-		// if movement speed is positive reduce stamina
-		if (this.mvmntSpeed > 5) {
+	//runs every frame, updates stamina based on movement speed
+	public void updateStamina(){
+		//if movement speed is positive reduce stamina
+		if(this.mvmntSpeed > 5){
 			this.stamina -= this.mvmntSpeed / 10;
 		}
-		// otherwise add stamina but not over max
-		else {
-			if (stamina < 1000) {
-				this.stamina += 10;
+		//otherwise add stamina but not over max
+		else{
+			if(stamina < 1000){
+				this.stamina+=10;
 			}
 		}
-		// tells updateMovement that the boat is out of stamina
-		if (this.stamina <= 0) {
+		//tells updateMovement that the boat is out of stamina
+		if (this.stamina <= 0){
 			this.outOfStamina = true;
 		}
-		// tells updateMovement that the boat has stamina
-		else {
+		//tells updateMovement that the boat has stamina
+		else{
 			this.outOfStamina = false;
 		}
 	}

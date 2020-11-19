@@ -12,7 +12,7 @@ public class Goose extends Obstacle {
 
     }
 
-    public void bounce() {
+    public void invertVert() {
 
         this.setVerticalVel(this.verticalVelocity * -1);
     }
