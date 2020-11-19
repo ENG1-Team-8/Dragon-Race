@@ -13,7 +13,6 @@ public class b2ContactListener implements ContactListener {
         Object objectA = contact.getFixtureA().getBody().getUserData();
         Object objectB = contact.getFixtureB().getBody().getUserData();
         if (objectA instanceof Boat) {
-            System.out.println("boat col");
             Boat boat = (Boat) objectA;
             if (objectB instanceof Obstacle) {
                 Obstacle obs = (Obstacle) objectB;
@@ -21,7 +20,6 @@ public class b2ContactListener implements ContactListener {
                 DragonBoatRace.toDelete.add(obs);
             }
         } else if (objectA instanceof Obstacle) {
-            System.out.println("obstacle col");
             Obstacle obs = (Obstacle) objectA;
             if (objectB instanceof Boat) {
 

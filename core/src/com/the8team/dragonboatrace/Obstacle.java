@@ -13,9 +13,9 @@ public class Obstacle extends MovingObject {
     public int verticalVelocity;
 
     public Obstacle(int horizontalVelocity, int verticalVelocity, int damageDealt, int x, int y, int width, int height,
-            int maxSpeed, boolean isStatic, World world, String textureFile) {
+            World world, String textureFile) {
 
-        super(x, y, width, height, maxSpeed, isStatic, world, textureFile);
+        super(x, y, width, height, false, world, textureFile);
         this.damageDealt = damageDealt;
         this.horizontalVelocity = horizontalVelocity;
         this.verticalVelocity = verticalVelocity;
