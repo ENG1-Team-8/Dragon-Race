@@ -2,7 +2,6 @@ package com.the8team.dragonboatrace;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -24,10 +23,9 @@ public class Player extends Boat {
 	 * @param world
 	 * @param textureFile
 	 */
-	public Player(int x, int y, int width, int height, int maxSpeed, int health,
+	public Player(int x, int y, int maxSpeed, int health,
 					int stamina, float acceleration, float maneuverability, World world, String textureFile) {
-		super(x, y, width, height, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
-		this.sprite = new Texture(textureFile);
+		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
     }
 
 	/**

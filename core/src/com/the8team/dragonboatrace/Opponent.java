@@ -20,9 +20,9 @@ public class Opponent extends Boat {
 	 * @param maneuverability
 	 * @param world
 	 */
-	public Opponent(int x, int y, int width, int height,  int maxSpeed, int health,
+	public Opponent(int x, int y, int maxSpeed, int health,
 					int stamina, float acceleration, float maneuverability, World world, String textureFile) {
-		super(x, y, width, height, health, maxSpeed, stamina, acceleration, maneuverability, world, textureFile);
+		super(x, y, health, maxSpeed, stamina, acceleration, maneuverability, world, textureFile);
     }
 
     public void move(float delta) {

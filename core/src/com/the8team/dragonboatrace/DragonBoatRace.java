@@ -81,15 +81,15 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(720, 224, 48, 16, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
+		player = new Player(720, 224, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
 
 		// Create the opponenets
 		opponents = new Opponent[5];
-		opponents[0] = new Opponent(720, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(720, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(720, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
-		opponents[3] = new Opponent(720, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(720, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		opponents[0] = new Opponent(720, 128, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(720, 320, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(720, 416, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[3] = new Opponent(720, 512, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
+		opponents[4] = new Opponent(720, 608, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
 
 		// Obtsacle list creation
 		obs = new ArrayList<Obstacle>();
@@ -98,14 +98,13 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Random obstacle placement
 		// Between x:700 and y:16 or y:704
 		for (int i = 0; i < 25 * leg; i++) {
-			obs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561),
-					64, 16, 8, world, "sprites/branch.png"));
+			obs.add(new Branch(-(1 + random.nextInt(4)), 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
+			obs.add(new Goose(-(1 + random.nextInt(4)), 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
 		}
 
 		// Creation of late game obstacles
 		for (int i = 0; i < 10 * leg; i++) {
-			lateObs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 4930 + random.nextInt(1410),
-					80 + random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+			lateObs.add(new Branch(-(1 + random.nextInt(4)), 4930 + random.nextInt(1410), 80 + random.nextInt(561), world));
 		}
 
 		// Create a sprite batch for rendering objects
@@ -326,14 +325,15 @@ public class DragonBoatRace extends ApplicationAdapter {
 		obs.clear();
 		lateObs.clear();
 
+		// Recreation of obstacles
 		for (int i = 0; i < 25 * leg; i++) {
-			obs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561),
-					64, 16, 8, false, world, "sprites/branch.png"));
+			obs.add(new Branch(-(1 + random.nextInt(4)), 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
+			obs.add(new Goose(-(1 + random.nextInt(4)), 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
 		}
 
+		// Recreation of late game obstacles
 		for (int i = 0; i < 10 * leg; i++) {
-			lateObs.add(new Branch(-(1 + random.nextInt(4)), 0, 2, 1000 + random.nextInt(5340),
-					80 + random.nextInt(561), 64, 16, 8, false, world, "sprites/branch.png"));
+			lateObs.add(new Branch(-(1 + random.nextInt(4)), 4930 + random.nextInt(1410), 80 + random.nextInt(561), world));
 		}
 	}
 

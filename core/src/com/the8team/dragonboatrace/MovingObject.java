@@ -25,10 +25,10 @@ public class MovingObject {
 	int width;
 	int height;
 
-	public MovingObject(int x, int y, int width, int height, boolean isStatic, World world, String textureFile) {
+	public MovingObject(int x, int y, int width, int height, World world, String textureFile) {
 
 		// Creates the box2d body in the game world
-		this.bBody = createBox(x, y, width, height, isStatic, world);
+		this.bBody = createBox(x, y, width, height, false, world);
 		this.sprite = new Texture(textureFile);
 		this.initialX = x;
 		this.initialY = y;

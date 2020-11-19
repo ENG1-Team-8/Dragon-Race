@@ -39,8 +39,6 @@ public class Boat extends MovingObject {
 	 * 
 	 * @param x               The starting x coordinate
 	 * @param y               The starting y coordinate
-	 * @param width           The width of the boat
-	 * @param height          The height of the boat
 	 * @param maxSpeed        The maximum speed of the boat
 	 * @param health          The boat's health
 	 * @param stamina         The stamina of the boat
@@ -49,11 +47,11 @@ public class Boat extends MovingObject {
 	 * @param world           The world in which to create the boat
 	 * @param textureFile     The texture location
 	 */
-	public Boat(int x, int y, int width, int height, int maxSpeed, int health, int stamina, float acceleration,
+	public Boat(int x, int y, int maxSpeed, int health, int stamina, float acceleration,
 			float maneuverability, World world, String textureFile) {
 
 		// Creates a MovingObject with relevant attributes
-		super(x, y, width, height, false, world, textureFile);
+		super(x, y, 48, 16, world, textureFile);
 
 		// Sets other relevant properties
 		this.maxSpeed = maxSpeed;

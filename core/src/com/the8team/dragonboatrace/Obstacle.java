@@ -2,9 +2,7 @@ package com.the8team.dragonboatrace;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.Body;
 
 public class Obstacle extends MovingObject {
 
@@ -15,7 +13,7 @@ public class Obstacle extends MovingObject {
     public Obstacle(int horizontalVelocity, int verticalVelocity, int damageDealt, int x, int y, int width, int height,
             World world, String textureFile) {
 
-        super(x, y, width, height, false, world, textureFile);
+        super(x, y, width, height, world, textureFile);
         this.damageDealt = damageDealt;
         this.horizontalVelocity = horizontalVelocity;
         this.verticalVelocity = verticalVelocity;
