@@ -5,12 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * d
+ */
 public class Player extends Boat {
 
 	/**
-	 * Constructs a player boat from the boat class
-	 * 
-	 * Creates a player and assigns a player texture
 	 * 
 	 * @param x
 	 * @param y
