@@ -52,8 +52,10 @@ public class Obstacle extends MovingObject {
 
     public void updateMovement() {
 
-        // Sets boat velocity using class variables
-        this.bBody.setLinearVelocity(this.horizontalVelocity, this.verticalVelocity);
+        // Sets obstacle velocity using class variables
+        if (this.bBody != null) {
+            this.bBody.setLinearVelocity(this.horizontalVelocity, this.verticalVelocity);
+        }
 
     }
 
