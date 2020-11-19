@@ -29,7 +29,7 @@ public class b2ContactListener implements ContactListener {
                 boat.updateHealth(obs.damageDealt);
                 DragonBoatRace.toDelete.add(obs);
 
-            } else if (objectB instanceof ChainShape) {
+            } else if (contact.getFixtureB().getShape() instanceof ChainShape) {
 
                 if (objectA instanceof Goose) {
 
@@ -40,7 +40,7 @@ public class b2ContactListener implements ContactListener {
 
             }
 
-        } else if (objectA instanceof ChainShape) {
+        } else if (contact.getFixtureA().getShape() instanceof ChainShape) {
 
             if (objectB instanceof Goose) {
 
@@ -56,15 +56,9 @@ public class b2ContactListener implements ContactListener {
     public void endContact(Contact contact) {
         Object objectA = contact.getFixtureA().getBody().getUserData();
         Object objectB = contact.getFixtureB().getBody().getUserData();
-        if (objectA instanceof Boat) {
+        if (objectA instanceof Boat || objectB instanceof Boat) {
 
-            if (objectB instanceof Obstacle) {
-
-                Boat boat = (Boat) objectA;
-                Obstacle obs = (Obstacle) objectB;
-                DragonBoatRace.toAdd.add(obs);
-
-            }
+            System.out.println("Boat stopped colliding");
 
         }
     }
