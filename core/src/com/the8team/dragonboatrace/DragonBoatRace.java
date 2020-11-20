@@ -1,6 +1,7 @@
 package com.the8team.dragonboatrace;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -18,8 +19,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-
-import java.util.Random;
 
 public class DragonBoatRace extends ApplicationAdapter {
 
@@ -99,12 +98,14 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Between x:700 and y:16 or y:704
 		for (int i = 0; i < 25 * leg; i++) {
 			obs.add(new Branch(-(1 + random.nextInt(4)), 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
-			obs.add(new Goose(-(1 + random.nextInt(4)), 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
+			obs.add(new Goose(-(1 + random.nextInt(4)), 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561),
+					world));
 		}
 
 		// Creation of late game obstacles
 		for (int i = 0; i < 10 * leg; i++) {
-			lateObs.add(new Branch(-(1 + random.nextInt(4)), 4930 + random.nextInt(1410), 80 + random.nextInt(561), world));
+			lateObs.add(
+					new Branch(-(1 + random.nextInt(4)), 4930 + random.nextInt(1410), 80 + random.nextInt(561), world));
 		}
 
 		// Create a sprite batch for rendering objects
@@ -132,6 +133,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	}
 
+	/**
+	 * Reset the player, opponents and obstacles
+	 */
 	public void reset() {
 
 		player.reset();
@@ -139,6 +143,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 			opponent.reset();
 		}
 		resetObstacles();
+
+		// Reset timer
 		timer = 0f;
 
 	}
@@ -146,6 +152,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	@Override
 	public void render() {
 
+		// Show the end screen if the last leg has been reached
 		if (leg == 3) {
 			batch.begin();
 			batch.draw(endScreen, camera.position.x - (1280 / 2), camera.position.y - (720 / 2));
@@ -158,6 +165,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 			batch.begin();
 			batch.draw(brokenScreen, camera.position.x - (1280 / 2), camera.position.y - (720 / 2));
 			batch.end();
+
+			// Restarts the game if player presses enter key
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER))
 				create();
 			return;
@@ -181,7 +190,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 			obstacle.draw(batch);
 		}
 
-		// late game obstacle
+		// Draw late game obstacle
 		for (Obstacle obstacle : lateObs) {
 			obstacle.draw(batch);
 		}
@@ -197,7 +206,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		batch.end();
 
 		// Update the ui
-		uiUpdate();
+		updateUI();
 
 		// Debug renderer
 		dr.render(world, camera.combined.scl(scale));
@@ -244,7 +253,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		updateLeg(timer);
 
 		// Updates the camera
-		cameraUpdate(delta);
+		updateCamera(delta);
 		tmr.setView(camera);
 
 		// Updates the projection matrix for the sprite batch
@@ -257,9 +266,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 	 * 
 	 * Tracks the players x-position and keeps the full height of the map in frame
 	 * 
-	 * @param delta
+	 * @param delta The delta time between frames
 	 */
-	public void cameraUpdate(float delta) {
+	public void updateCamera(float delta) {
 		Vector3 position = camera.position;
 
 		// Take the players position correctly scaled
@@ -272,35 +281,62 @@ public class DragonBoatRace extends ApplicationAdapter {
 		camera.update();
 	}
 
-	public void uiUpdate() {
+	/**
+	 * Update ui elements
+	 */
+	public void updateUI() {
+
+		// Renders a rectangle with transformed player health as width
 		healthBar.begin(ShapeRenderer.ShapeType.Filled);
-		healthBar.rect(615, (player.getPosition().y * 16) + 16, player.health * 5, 5);
+		healthBar.rect(615, (player.getPosition().y * scale) + 16, player.health * 5, 5);
 		healthBar.end();
+
+		// Renders a rectangle with transformed player stamina as width
 		staminaBar.begin(ShapeRenderer.ShapeType.Filled);
-		staminaBar.rect(615, (player.getPosition().y * 16) + 10, player.stamina / 20, 5);
+		staminaBar.rect(615, (player.getPosition().y * scale) + 10, player.stamina / 20, 5);
 		staminaBar.end();
 	}
 
+	/**
+	 * Remove physics bodies for each object in the toDelete list
+	 * <p>
+	 * This method is required so that bodies are modified on world step, avoiding
+	 * bugs and crashes
+	 */
 	public void updateCollisionBodies() {
 		// Deletes physics objects which are added to the delete list
 		if (toDelete.size() > 0) {
 			for (MovingObject obj : toDelete) {
 				obj.removeCollision();
 			}
+
+			// Empty the toDelete list
 			toDelete.clear();
 		}
 	}
 
+	/**
+	 * Check if all boats have reached the finish line and updates leg accordingly
+	 * 
+	 * @param timer The current leg time
+	 */
 	public void updateLeg(float timer) {
+
+		// If first leg, prevent fastest time from being overwritten (practice leg)
 		if (leg == 1) {
 			timer = 10000;
-		} else if (leg == 2) {
+		}
+
+		// Else if final leg, do not reset gamestate
+		else if (leg == 2) {
 			if (player.isFinished(timer)) {
 				System.out.println("final time: " + player.fastestTime);
 				leg += 1;
 				return;
 			}
 		}
+
+		// Otherwise increment the leg and reset the gamestate
 		if (player.isFinished(timer)) {
 			System.out.println(player.fastestTime);
 			leg += 1;
@@ -308,32 +344,40 @@ public class DragonBoatRace extends ApplicationAdapter {
 		}
 	}
 
+	/**
+	 * Resets the obstacles in the game world
+	 */
 	public void resetObstacles() {
 
+		// Deletes bodies of all obstacles
 		for (Obstacle obstacle : obs) {
 			if (obstacle.bBody != null) {
 				obstacle.removeCollision();
 			}
 		}
 
+		// Deletes bodies of all late game obstacles
 		for (Obstacle obstacle : lateObs) {
 			if (obstacle.bBody != null) {
 				obstacle.removeCollision();
 			}
 		}
 
+		// Clear the lists of obstacles
 		obs.clear();
 		lateObs.clear();
 
 		// Recreation of obstacles
 		for (int i = 0; i < 25 * leg; i++) {
 			obs.add(new Branch(-(1 + random.nextInt(4)), 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
-			obs.add(new Goose(-(1 + random.nextInt(4)), 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561), world));
+			obs.add(new Goose(-(1 + random.nextInt(4)), 2, 1000 + random.nextInt(5340), 80 + random.nextInt(561),
+					world));
 		}
 
 		// Recreation of late game obstacles
 		for (int i = 0; i < 10 * leg; i++) {
-			lateObs.add(new Branch(-(1 + random.nextInt(4)), 4930 + random.nextInt(1410), 80 + random.nextInt(561), world));
+			lateObs.add(
+					new Branch(-(1 + random.nextInt(4)), 4930 + random.nextInt(1410), 80 + random.nextInt(561), world));
 		}
 	}
 

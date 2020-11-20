@@ -25,8 +25,4 @@ public class Opponent extends Boat {
 		super(x, y, health, maxSpeed, stamina, acceleration, maneuverability, world, textureFile);
     }
 
-    public void move(float delta) {
-        this.updateMovement(1, 0, delta);
-    }
-
 }
