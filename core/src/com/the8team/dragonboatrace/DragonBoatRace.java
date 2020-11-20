@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.ai.steer.behaviors.Cohesion;
+import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
+import com.badlogic.gdx.ai.steer.behaviors.Evade;
+import com.badlogic.gdx.ai.steer.behaviors.RaycastObstacleAvoidance;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +40,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 	World world;
 	Player player;
 	Opponent[] opponents;
+	TargetableObject[] finishLine;
+
 	ArrayList<Obstacle> obs, lateObs;
 
 	// Sprite rendering
@@ -85,11 +91,28 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Create the opponenets
 		opponents = new Opponent[5];
-		opponents[0] = new Opponent(720, 128, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(720, 320, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(720, 416, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
-		opponents[3] = new Opponent(720, 512, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(720, 608, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		finishLine = new TargetableObject[5];
+
+		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
+		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+
+		finishLine[0] = new TargetableObject(6376, 124, 16, 90, true, world, "sprites/red_boat.png");
+		finishLine[1] = new TargetableObject(6376, 316, 16, 92, true, world, "sprites/red_boat.png");
+		finishLine[2] = new TargetableObject(6376, 412, 16, 92, true, world, "sprites/red_boat.png");
+		finishLine[3] = new TargetableObject(6376, 508, 16, 92, true, world, "sprites/red_boat.png");
+		finishLine[4] = new TargetableObject(6376, 600, 16, 90, true, world, "sprites/red_boat.png");
+
+
+		// Create opponent ai
+
+		for (int i = 0; i < 5; i++) {
+			opponents[i].arriveAt(finishLine[i]);
+		}
+
+
 
 		// Obtsacle list creation
 		obs = new ArrayList<Obstacle>();
@@ -237,6 +260,21 @@ public class DragonBoatRace extends ApplicationAdapter {
 			}
 		}
 
+		//opponents' movemement and behavior
+
+		for (int i=0;i<5;i++)
+		{
+			opponents[i].update(delta);
+				for (Obstacle obstacle : obs) {
+						if (obstacle.getPosition().x - opponents[i].getPosition().x <= 16 && obstacle.getPosition().x - opponents[i].getPosition().x > 0) {
+							opponents[i].avoidObstacle(obstacle, delta);
+					}
+				}
+		}
+
+
+
+
 		// Reduces or adds stamina based on movement speed
 		player.updateStamina();
 
@@ -305,6 +343,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 			System.out.println(player.fastestTime);
 			leg += 1;
 			reset();
+		}
+		for (int i=0; i<5; i++)
+		{
+			opponents[i].arriveAt(finishLine[i]);
 		}
 	}
 

@@ -1,14 +1,18 @@
 package com.the8team.dragonboatrace;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.steer.Proximity;
+import com.badlogic.gdx.ai.steer.Steerable;
+import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Obstacle extends MovingObject {
+public class Obstacle extends MovingObject{
 
     public int damageDealt;
     public int horizontalVelocity;
     public int verticalVelocity;
+    public Steerable<Vector2> owner;
 
     public Obstacle(int horizontalVelocity, int verticalVelocity, int damageDealt, int x, int y, int width, int height,
             World world, String textureFile) {
@@ -17,7 +21,7 @@ public class Obstacle extends MovingObject {
         this.damageDealt = damageDealt;
         this.horizontalVelocity = horizontalVelocity;
         this.verticalVelocity = verticalVelocity;
-
+        Steerable<Vector2> owner = new Opponent(0,0,0,0,0,0,0,0,0,world,"sprites/red_boat.png");
     }
 
     /**
