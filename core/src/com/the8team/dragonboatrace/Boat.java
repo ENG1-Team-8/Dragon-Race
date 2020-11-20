@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * A boat entity extended from MovingObject
  * 
+ * @author Charlie Hayes
+ * @author Matt Tomlinson
  * @see MovingObject
  */
 public class Boat extends MovingObject {
@@ -47,8 +49,8 @@ public class Boat extends MovingObject {
 	 * @param world           The world in which to create the boat
 	 * @param textureFile     The texture location
 	 */
-	public Boat(int x, int y, int maxSpeed, int health, int stamina, float acceleration,
-			float maneuverability, World world, String textureFile) {
+	public Boat(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
+			World world, String textureFile) {
 
 		// Creates a MovingObject with relevant attributes
 		super(x, y, 48, 16, world, textureFile);
@@ -122,7 +124,7 @@ public class Boat extends MovingObject {
 	 * Updates the boat's health
 	 * <p>
 	 * Subtracts the damage taken from the boat's health and sets broken=true if
-	 * health <= 0
+	 * health less than or equal to 0
 	 * 
 	 * @param damage The damage to apply
 	 */
@@ -161,6 +163,8 @@ public class Boat extends MovingObject {
 	 * <p>
 	 * Compares boat's x position to the position of the finish line
 	 * 
+	 * @param timer The current leg's time
+	 * 
 	 * @return true if finished, false otherwise
 	 */
 	public boolean isFinished(float timer) {
@@ -179,7 +183,7 @@ public class Boat extends MovingObject {
 	 */
 	public void reset() {
 		// Reposition boat to initial position
-		this.bBody.setTransform(this.initialX / 16, this.initialY / 16, 0);
+		this.bBody.setTransform(this.initialX / MovingObject.scale, this.initialY / MovingObject.scale, 0);
 		this.health = initialHealth;
 		this.stamina = initialStamina;
 		this.mvmntSpeed = 0;
