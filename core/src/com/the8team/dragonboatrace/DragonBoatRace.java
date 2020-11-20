@@ -380,10 +380,6 @@ public class DragonBoatRace extends ApplicationAdapter {
 			leg += 1;
 			reset();
 		}
-		for (int i=0; i<5; i++)
-		{
-			opponents[i].arriveAt(finishLine[i]);
-		}
 	}
 
 	/**

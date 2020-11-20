@@ -64,7 +64,7 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 	private void applySteering (float delta)
 	{
 		if (this.steerOutput.linear.x>0) {
-			this.updateMovement((int) (this.steerOutput.linear.x / (4 * acceleration / 5)), (int) this.steerOutput.linear.y / 4, delta);
+			this.updateMovement(1, 0, delta);
 		}
 		else
 		{
@@ -206,10 +206,11 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 	@Override
 	public void reset() {
 		// Reposition boat to initial position
-		this.getBody().setTransform((this.initialX+36)/ 16, this.initialY / 16, 0);
+		this.getBody().setTransform((this.initialX+32)/ 16, this.initialY / 16, 0);
 		this.health = initialHealth;
 		this.stamina = initialStamina;
 		this.mvmntSpeed = 0;
+		this.broken=false;
 	}
 
 	// a simple function that checks for an object in front of the opponent and makes it change it's position in accordance
@@ -234,6 +235,21 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 		else if ((this.getPosition().y-1)*scale<=yMin)
 		{
 			this.updateMovement(0,1,delta);
+		}
+
+		if (yMin >=600)
+		{
+			if (((this.getPosition().y+1)*scale)+8>=yMax)
+			{
+				this.updateMovement(0,-1,delta);
+			}
+		}
+		else if (yMin <=100)
+		{
+			if ((this.getPosition().y-1)*scale-8<=yMin)
+			{
+				this.updateMovement(0,1,delta);
+			}
 		}
 	}
 
