@@ -219,7 +219,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	/**
 	 * Updates the game logic
 	 * 
-	 * @param delta
+	 * @param delta The delta time between frames
 	 */
 	public void update(float delta) {
 

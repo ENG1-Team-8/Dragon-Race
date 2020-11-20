@@ -11,9 +11,6 @@ public class Opponent extends Boat {
 	 * 
 	 * @param x
 	 * @param y
-	 * @param width
-	 * @param height
-	 * @param isStatic
 	 * @param health
 	 * @param stamina
 	 * @param acceleration

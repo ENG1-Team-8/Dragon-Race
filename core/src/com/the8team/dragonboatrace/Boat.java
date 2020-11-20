@@ -124,7 +124,7 @@ public class Boat extends MovingObject {
 	 * Updates the boat's health
 	 * <p>
 	 * Subtracts the damage taken from the boat's health and sets broken=true if
-	 * health <= 0
+	 * health less than or equal to 0
 	 * 
 	 * @param damage The damage to apply
 	 */
@@ -162,6 +162,8 @@ public class Boat extends MovingObject {
 	 * Checks if the boat has finished the race
 	 * <p>
 	 * Compares boat's x position to the position of the finish line
+	 * 
+	 * @param timer The current leg's time
 	 * 
 	 * @return true if finished, false otherwise
 	 */
