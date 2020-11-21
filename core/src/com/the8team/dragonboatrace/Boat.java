@@ -87,6 +87,7 @@ public class Boat extends MovingObject {
 		// Stops the boat from going backwards or moving when broken
 		if (this.mvmntSpeed < 0 || this.broken) {
 			this.mvmntSpeed = 0;
+			verticalForce = 0;
 		}
 		// checks if the boat is out of stamina
 		else if (this.outOfStamina) {
@@ -170,9 +171,10 @@ public class Boat extends MovingObject {
 	public boolean isFinished(float timer) {
 		if (this.getPosition().x * DragonBoatRace.scale > 6320) {
 			// Updates the boat's fastest time
-			if (timer < this.fastestTime) {
-				this.fastestTime = timer;
-			}
+			this.fastestTime=Math.min(this.fastestTime, timer);
+			return true;
+		} else if (this.isBroken() == true) {
+			// Does not update fastest time as DNF, just returns true
 			return true;
 		}
 		return false;
@@ -182,10 +184,20 @@ public class Boat extends MovingObject {
 	 * Resets the boat to its initial position, stamina and health. Zeros speed.
 	 */
 	public void reset() {
+
 		// Reposition boat to initial position
 		this.bBody.setTransform(this.initialX / MovingObject.scale, this.initialY / MovingObject.scale, 0);
 		this.health = initialHealth;
 		this.stamina = initialStamina;
+		this.broken = false;
 		this.mvmntSpeed = 0;
+	}
+
+	public boolean isBroken() {
+		return this.broken;
+	}
+
+	public float getFastestTime() {
+		return this.fastestTime;
 	}
 }

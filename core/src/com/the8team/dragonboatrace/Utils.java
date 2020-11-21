@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * 
  * @author Matt Tomlinson
  */
-public class TiledObjects {
+public class Utils {
 
     // Game scale
     static float scale = 16;

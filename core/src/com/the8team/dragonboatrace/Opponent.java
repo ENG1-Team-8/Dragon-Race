@@ -6,7 +6,6 @@ import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Opponent extends Boat implements Steerable<Vector2> {
@@ -48,7 +47,6 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 
 
 	//updates the behavior and acceleration based on delta
-
 	public void update(float delta)
 	{
 		this.updateStamina();
@@ -59,7 +57,6 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 	}
 
 	//don't ask
-
 	private void applySteering (float delta)
 	{
 		if (this.steerOutput.linear.x>0) {
@@ -82,20 +79,63 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 		}
 	}
 
-	public Body getBody()
+	// a simple function that checks for an object in front of the opponent and makes it change its position in accordance
+
+	public void avoidObstacle (Obstacle obstacle, float delta)
 	{
-		return this.bBody;
+
+
+		if (obstacle.getPosition().x - this.getPosition().x <= 16 && obstacle.getPosition().x - this.getPosition().x > 0) {
+			if (this.inLane()) {
+				if (obstacle.getPosition().y - this.getPosition().y <= 4 && obstacle.getPosition().y - this.getPosition().y >= 0) {
+					this.updateMovement(0, -1, delta);
+				} else if (this.getPosition().y - obstacle.getPosition().y <= 4 && this.getPosition().y - obstacle.getPosition().y >= 0) {
+					this.updateMovement(0, 1, delta);
+				}
+			}
+		}
+
+		//stop it from getting out its lane
+
+		if ((this.getPosition().y+1)*scale>=yMax)
+		{
+			this.updateMovement(0,-1,delta);
+		}
+		else if ((this.getPosition().y-1)*scale<=yMin)
+		{
+			this.updateMovement(0,1,delta);
+		}
+
+		//keep the boats in the first and last lane from getting stuck at the edge
+		if (yMax >=600)
+		{
+			if (((this.getPosition().y+1)*scale)+8>=yMax)
+			{
+				this.updateMovement(0,-1,delta);
+			}
+		}
+		else if (yMin <=100)
+		{
+			if ((this.getPosition().y-1)*scale-8<=yMin)
+			{
+				this.updateMovement(0,1,delta);
+			}
+		}
 	}
 
 	// create an arrive behavior to get to the finish line
-
 	public void arriveAt (Steerable<Vector2> target)
 	{
 		this.setBehavior(new Arrive<>(this,target));
 	}
 
-	//interface fot steering
+	public void setBehavior(SteeringBehavior<Vector2> behavior) {
+		this.behavior = behavior;
+	}
 
+	// Interface overrides
+
+	//interface for steering
 	@Override
 	public Vector2 getLinearVelocity() {
 		return this.getBody().getLinearVelocity();
@@ -196,71 +236,6 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 	@Override
 	public Location<Vector2> newLocation() {
 		return null;
-	}
-
-	public void setBehavior(SteeringBehavior<Vector2> behavior) {
-		this.behavior = behavior;
-	}
-
-	@Override
-	public void reset() {
-		// Reposition boat to initial position
-		this.getBody().setTransform((this.initialX+32)/ 16, this.initialY / 16, 0);
-		this.health = initialHealth;
-		this.stamina = initialStamina;
-		this.mvmntSpeed = 0;
-		this.broken=false;
-	}
-
-	// a simple function that checks for an object in front of the opponent and makes it change its position in accordance
-
-	public void avoidObstacle (Obstacle obstacle, float delta)
-	{
-
-
-		if (obstacle.getPosition().x - this.getPosition().x <= 16 && obstacle.getPosition().x - this.getPosition().x > 0) {
-			if (this.inLane()) {
-				if (obstacle.getPosition().y - this.getPosition().y <= 4 && obstacle.getPosition().y - this.getPosition().y >= 0) {
-					this.updateMovement(0, -1, delta);
-				} else if (this.getPosition().y - obstacle.getPosition().y <= 4 && this.getPosition().y - obstacle.getPosition().y >= 0) {
-					this.updateMovement(0, 1, delta);
-				}
-			}
-		}
-
-		//stop it from getting out its lane
-
-		if ((this.getPosition().y+1)*scale>=yMax)
-		{
-			this.updateMovement(0,-1,delta);
-		}
-		else if ((this.getPosition().y-1)*scale<=yMin)
-		{
-			this.updateMovement(0,1,delta);
-		}
-
-		//keep the boats in the first and last lane from getting stuck at the edge
-		if (yMax >=600)
-		{
-			if (((this.getPosition().y+1)*scale)+8>=yMax)
-			{
-				this.updateMovement(0,-1,delta);
-			}
-		}
-		else if (yMin <=100)
-		{
-			if ((this.getPosition().y-1)*scale-8<=yMin)
-			{
-				this.updateMovement(0,1,delta);
-			}
-		}
-	}
-
-	//a function to return the state of the boat
-
-	boolean isBroken ()
-	{
-		return this.health <= 0;
 	}
 
 }

@@ -137,6 +137,15 @@ public class MovingObject {
 	}
 
 	/**
+	 * Returns the object's body
+	 * 
+	 * @return The object's body
+	 */
+	public Body getBody() {
+		return this.bBody;
+	}
+
+	/**
 	 * Destroys the objects body to remove from the game world and its collision
 	 */
 	public void removeCollision() {

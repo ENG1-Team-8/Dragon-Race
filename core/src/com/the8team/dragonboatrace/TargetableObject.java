@@ -3,7 +3,6 @@ package com.the8team.dragonboatrace;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class TargetableObject extends MovingObject implements Steerable <Vector2> {
@@ -18,10 +17,7 @@ public class TargetableObject extends MovingObject implements Steerable <Vector2
         this.boundingRadius=100;
     }
 
-    @Override
-    public Vector2 getPosition() {
-        return this.bBody.getPosition();
-    }
+    // Interface overrides
 
     @Override
     public Vector2 getLinearVelocity() {
@@ -123,11 +119,6 @@ public class TargetableObject extends MovingObject implements Steerable <Vector2
     @Override
     public Location<Vector2> newLocation() {
         return null;
-    }
-
-    public Body getBody()
-    {
-        return this.bBody;
     }
 
 
