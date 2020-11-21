@@ -86,17 +86,17 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(720, 224, 50, 2, 1000, 10f, 2.0f, world, "sprites/purple_boat.png");
+		player = new Player(720, 224, 55, 10, 1000, 6f, 2.0f, world, "sprites/purple_boat.png");
 
 		// Create the opponents
 		opponents = new Opponent[5];
 		finishLine = new TargetableObject[5];
 
-		opponents[0] = new Opponent(700, 128, 50, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(700, 320, 50, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(700, 416, 50, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
-		opponents[3] = new Opponent(700, 512, 50, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(700, 608, 50, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		opponents[0] = new Opponent(720, 128, 50, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(720, 320, 50, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(720, 416, 50, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[3] = new Opponent(720, 512, 50, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
+		opponents[4] = new Opponent(720, 608, 50, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
 
 		finishLine[0] = new TargetableObject(6376, 124, 16, 90, world, "sprites/red_boat.png");
 		finishLine[1] = new TargetableObject(6376, 316, 16, 92, world, "sprites/red_boat.png");
@@ -261,15 +261,17 @@ public class DragonBoatRace extends ApplicationAdapter {
 		}
 
 		// Opponents' movement and behavior
-		for (Opponent opponent : opponents) {
-			opponent.update(delta);
-				for (Obstacle obstacle : obs)
+		if (player.isStarted()) {
+			for (Opponent opponent : opponents) {
+				opponent.update(delta);
+					for (Obstacle obstacle : obs)
+					{
+						opponent.avoidObstacle(obstacle, delta);
+					}
+				for (Obstacle obstacle : lateObs)
 				{
 					opponent.avoidObstacle(obstacle, delta);
 				}
-			for (Obstacle obstacle : lateObs)
-			{
-				opponent.avoidObstacle(obstacle, delta);
 			}
 		}
 

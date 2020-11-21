@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class Player extends Boat {
 
+	boolean started = false;
+
 	/**
 	 * The player constructor.
 	 * <p>
@@ -50,6 +52,7 @@ public class Player extends Boat {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			horizontalForce += 1;
+			this.started = true;
 		}
 
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -66,12 +69,16 @@ public class Player extends Boat {
 
 	// As all of the obstacles move, there ends up not being any at the end
 	// This detects when the player is near the end to spawn new obstacles
-	public Boolean lateGame() {
+	public boolean lateGame() {
 		if (this.getPosition().x * DragonBoatRace.scale > 4930) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isStarted() {
+		return this.started;
 	}
 
 }
