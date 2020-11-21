@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Player extends Boat {
 
 	/**
-	 * The player costructor.
+	 * The player constructor.
 	 * <p>
 	 * Uses the passed arguments to create a boat to represent the player
 	 * 
@@ -36,7 +36,7 @@ public class Player extends Boat {
 	/**
 	 * Updates the forces applied to the player's boat according to their input
 	 * 
-	 * @param delta The delat time between frames
+	 * @param delta The delta time between frames
 	 */
 	public void inputUpdate(float delta) {
 

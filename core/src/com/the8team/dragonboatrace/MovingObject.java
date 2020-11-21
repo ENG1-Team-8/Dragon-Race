@@ -69,8 +69,8 @@ public class MovingObject {
 		// Checks that the object has a sprite/texture
 		if (this.sprite != null) {
 			// Attaches sprite to the bottom left of the body
-			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2),
-					this.getPosition().y * scale - (this.sprite.getHeight() / 2));
+			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2f),
+					this.getPosition().y * scale - (this.sprite.getHeight() / 2f));
 		}
 	}
 
@@ -83,7 +83,7 @@ public class MovingObject {
 	 * @param y        The y coordinate of the body
 	 * @param width    The width of the body
 	 * @param height   The height of the body
-	 * @param isStatic Whether the body is static (here for testing puropses and
+	 * @param isStatic Whether the body is static (here for testing purposes and
 	 *                 possibility of none-moving objects)
 	 * @param world    The world to add the body to
 	 * @return The new box2d body
@@ -112,7 +112,7 @@ public class MovingObject {
 
 		// Sets the shape of the body to be a box polygon
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2 / scale, height / 2 / scale);
+		shape.setAsBox(width / 2f / scale, height / 2f / scale);
 
 		// Fixes the box to the body
 		body.createFixture(shape, 1.0f);

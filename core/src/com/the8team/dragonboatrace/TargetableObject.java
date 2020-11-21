@@ -9,9 +9,9 @@ import com.badlogic.gdx.physics.box2d.World;
 public class TargetableObject extends MovingObject implements Steerable <Vector2> {
 
     boolean tagged;
-    float orientation,boundingRadius;
+    float boundingRadius;
 
-    public TargetableObject(int x, int y, int width, int height, boolean isStatic, World world, String textureFile)
+    public TargetableObject(int x, int y, int width, int height, World world, String textureFile)
     {
         super(x,y,width,height,world,textureFile);
         this.tagged=false;
@@ -127,7 +127,7 @@ public class TargetableObject extends MovingObject implements Steerable <Vector2
 
     public Body getBody()
     {
-        return getBody();
+        return this.bBody;
     }
 
 

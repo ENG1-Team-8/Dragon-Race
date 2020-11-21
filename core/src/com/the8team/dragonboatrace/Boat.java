@@ -74,7 +74,7 @@ public class Boat extends MovingObject {
 	 * The forces take values 1 or 0 typically to represent whether or not a force
 	 * is being applied.
 	 * 
-	 * @param horizontalForce Whether the boat is undergoing horuzontal force (-1
+	 * @param horizontalForce Whether the boat is undergoing horizontal force (-1
 	 *                        left, 1 right)
 	 * @param verticalForce   Whether the boat is undergoing vertical force (-1
 	 *                        down, 1 up)
@@ -113,7 +113,7 @@ public class Boat extends MovingObject {
 	 * @return true if in lane, false otherwise
 	 */
 	public boolean inLane() {
-		// If the boat exceded its lane bounds...
+		// If the boat exceeded its lane bounds...
 		if ((this.getPosition().y) * MovingObject.scale > yMax || (this.getPosition().y) * MovingObject.scale < yMin) {
 			return false;
 		}

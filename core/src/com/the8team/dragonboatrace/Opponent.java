@@ -4,7 +4,6 @@ import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
-import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -36,7 +35,7 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 	SteeringAcceleration<Vector2> steerOutput;
 
 
-	public Opponent(int x, int y, int width, int height, int maxSpeed, int health,
+	public Opponent(int x, int y, int maxSpeed, int health,
 					int stamina, float acceleration, float maneuverability, World world, String textureFile) {
 		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
 		this.setMaxLinearSpeed(maxSpeed);
@@ -44,7 +43,7 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 		this.orientation=this.bBody.getAngle();
 		this.tagged=false;
 		this.boundingRadius=48;
-		this.steerOutput = new SteeringAcceleration<Vector2>(new Vector2());
+		this.steerOutput = new SteeringAcceleration<>(new Vector2());
 	}
 
 
@@ -88,11 +87,11 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 		return this.bBody;
 	}
 
-	// create an arrive behavior to get to the finishline
+	// create an arrive behavior to get to the finish line
 
 	public void arriveAt (Steerable<Vector2> target)
 	{
-		this.setBehavior(new Arrive<Vector2>(this,target));
+		this.setBehavior(new Arrive<>(this,target));
 	}
 
 	//interface fot steering
@@ -213,20 +212,23 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 		this.broken=false;
 	}
 
-	// a simple function that checks for an object in front of the opponent and makes it change it's position in accordance
+	// a simple function that checks for an object in front of the opponent and makes it change its position in accordance
 
 	public void avoidObstacle (Obstacle obstacle, float delta)
 	{
 
-		if (this.inLane()) {
-			if (obstacle.getPosition().y - this.getPosition().y <= 8 && obstacle.getPosition().y - this.getPosition().y >= 0) {
-				this.updateMovement(0, -1, delta);
-			} else if (this.getPosition().y - obstacle.getPosition().y <= 8 && this.getPosition().y - obstacle.getPosition().y >= 0) {
-				this.updateMovement(0, 1, delta);
+
+		if (obstacle.getPosition().x - this.getPosition().x <= 16 && obstacle.getPosition().x - this.getPosition().x > 0) {
+			if (this.inLane()) {
+				if (obstacle.getPosition().y - this.getPosition().y <= 4 && obstacle.getPosition().y - this.getPosition().y >= 0) {
+					this.updateMovement(0, -1, delta);
+				} else if (this.getPosition().y - obstacle.getPosition().y <= 4 && this.getPosition().y - obstacle.getPosition().y >= 0) {
+					this.updateMovement(0, 1, delta);
+				}
 			}
 		}
 
-		//top it from getting out its lane
+		//stop it from getting out its lane
 
 		if ((this.getPosition().y+1)*scale>=yMax)
 		{
@@ -237,7 +239,8 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 			this.updateMovement(0,1,delta);
 		}
 
-		if (yMin >=600)
+		//keep the boats in the first and last lane from getting stuck at the edge
+		if (yMax >=600)
 		{
 			if (((this.getPosition().y+1)*scale)+8>=yMax)
 			{
@@ -251,6 +254,13 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 				this.updateMovement(0,1,delta);
 			}
 		}
+	}
+
+	//a function to return the state of the boat
+
+	boolean isBroken ()
+	{
+		return this.health <= 0;
 	}
 
 }

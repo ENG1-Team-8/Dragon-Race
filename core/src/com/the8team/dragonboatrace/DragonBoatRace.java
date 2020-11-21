@@ -6,10 +6,6 @@ import java.util.Random;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ai.steer.behaviors.Cohesion;
-import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
-import com.badlogic.gdx.ai.steer.behaviors.Evade;
-import com.badlogic.gdx.ai.steer.behaviors.RaycastObstacleAvoidance;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -56,9 +52,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 	Sound startMusic;
 
 	// Objects to delete
-	static ArrayList<MovingObject> toDelete = new ArrayList<MovingObject>();
+	static ArrayList<MovingObject> toDelete = new ArrayList<>();
 
-	// Random number genertion
+	// Random number generation
 	Random random = new Random();
 
 	@Override
@@ -88,24 +84,24 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Create the player
 		player = new Player(720, 224, 50, 10, 1000, 5f, 2.0f, world, "sprites/purple_boat.png");
 
-		// Create the opponenets
+		// Create the opponents
 		opponents = new Opponent[5];
 		finishLine = new TargetableObject[5];
 
-		opponents[0] = new Opponent(700, 128, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(700, 320, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(700, 416, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
-		opponents[3] = new Opponent(700, 512, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(700, 608, 48, 16, 100, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		opponents[0] = new Opponent(700, 128, 50, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
+		opponents[1] = new Opponent(700, 320, 50, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
+		opponents[2] = new Opponent(700, 416, 50, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
+		opponents[3] = new Opponent(700, 512, 50, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
+		opponents[4] = new Opponent(700, 608, 50, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
 
-		finishLine[0] = new TargetableObject(6376, 124, 16, 90, true, world, "sprites/red_boat.png");
-		finishLine[1] = new TargetableObject(6376, 316, 16, 92, true, world, "sprites/red_boat.png");
-		finishLine[2] = new TargetableObject(6376, 412, 16, 92, true, world, "sprites/red_boat.png");
-		finishLine[3] = new TargetableObject(6376, 508, 16, 92, true, world, "sprites/red_boat.png");
-		finishLine[4] = new TargetableObject(6376, 600, 16, 90, true, world, "sprites/red_boat.png");
+		finishLine[0] = new TargetableObject(6376, 124, 16, 90, world, "sprites/red_boat.png");
+		finishLine[1] = new TargetableObject(6376, 316, 16, 92, world, "sprites/red_boat.png");
+		finishLine[2] = new TargetableObject(6376, 412, 16, 92, world, "sprites/red_boat.png");
+		finishLine[3] = new TargetableObject(6376, 508, 16, 92, world, "sprites/red_boat.png");
+		finishLine[4] = new TargetableObject(6376, 600, 16, 90, world, "sprites/red_boat.png");
 
 
-		// Create opponent ai
+		// Make opponents move towards the finish line
 
 		for (int i = 0; i < 5; i++) {
 			opponents[i].arriveAt(finishLine[i]);
@@ -113,9 +109,9 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 
 
-		// Obtsacle list creation
-		obs = new ArrayList<Obstacle>();
-		lateObs = new ArrayList<Obstacle>();
+		// Obstacle list creation
+		obs = new ArrayList<>();
+		lateObs = new ArrayList<>();
 
 		// Random obstacle placement
 		// Between x:700 and y:16 or y:704
@@ -178,7 +174,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Show the end screen if the last leg has been reached
 		if (leg == 3) {
 			batch.begin();
-			batch.draw(endScreen, camera.position.x - (1280 / 2), camera.position.y - (720 / 2));
+			batch.draw(endScreen, camera.position.x - (1280 / 2f), camera.position.y - (720 / 2f));
 			batch.end();
 			return;
 		}
@@ -186,7 +182,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// Checks if the player has broken their boat and displays broken screen
 		if (player.broken) {
 			batch.begin();
-			batch.draw(brokenScreen, camera.position.x - (1280 / 2), camera.position.y - (720 / 2));
+			batch.draw(brokenScreen, camera.position.x - (1280 / 2f), camera.position.y - (720 / 2f));
 			batch.end();
 
 			// Restarts the game if player presses enter key
@@ -269,16 +265,19 @@ public class DragonBoatRace extends ApplicationAdapter {
 			}
 		}
 
-		//opponents' movemement and behavior
+		//opponents' movement and behavior
 
 		for (int i=0;i<5;i++)
 		{
 			opponents[i].update(delta);
-				for (Obstacle obstacle : obs) {
-						if (obstacle.getPosition().x - opponents[i].getPosition().x <= 16 && obstacle.getPosition().x - opponents[i].getPosition().x > 0) {
-							opponents[i].avoidObstacle(obstacle, delta);
-					}
+				for (Obstacle obstacle : obs)
+				{
+					opponents[i].avoidObstacle(obstacle, delta);
 				}
+			for (Obstacle obstacle : lateObs)
+			{
+				opponents[i].avoidObstacle(obstacle, delta);
+			}
 		}
 
 
@@ -291,7 +290,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		updateLeg(timer);
 
 		// Updates the camera
-		updateCamera(delta);
+		updateCamera();
 		tmr.setView(camera);
 
 		// Updates the projection matrix for the sprite batch
@@ -303,17 +302,16 @@ public class DragonBoatRace extends ApplicationAdapter {
 	 * Updates the camera
 	 * 
 	 * Tracks the players x-position and keeps the full height of the map in frame
-	 * 
-	 * @param delta The delta time between frames
+	 *
 	 */
-	public void updateCamera(float delta) {
+	public void updateCamera() {
 		Vector3 position = camera.position;
 
 		// Take the players position correctly scaled
 		position.x = player.getPosition().x * scale;
 
 		// Follow the y-centre of the map
-		position.y = 720 / 2;
+		position.y = 720 / 2f;
 		camera.position.set(position);
 
 		camera.update();
@@ -365,18 +363,41 @@ public class DragonBoatRace extends ApplicationAdapter {
 			timer = 10000;
 		}
 
-		// Else if final leg, do not reset gamestate
-		else if (leg == 2) {
-			if (player.isFinished(timer)) {
+		// Check for the opponents to have finished,
+		// if they broke down the line, set their time to an arbitrary high number
+		boolean opponentsFinished = true;
+		for (int i=0; i<5;i++)
+		{
+			if(!opponents[i].isFinished(timer) && !opponents[i].isBroken())
+			{
+				opponentsFinished = false;
+			}
+			else if(opponents[i].isFinished(timer))
+			{
+				opponents[i].fastestTime=Math.min(opponents[i].fastestTime,timer);
+			}
+			else
+			{
+				float brokenTimer = 10000;
+				opponents[i].fastestTime=Math.min(opponents[i].fastestTime,brokenTimer);
+			}
+		}
+
+		// If it's the final leg, do not reset gamestate
+		if (leg == 2) {
+			if (player.isFinished(timer) && opponentsFinished) {
 				System.out.println("final time: " + player.fastestTime);
+				for(int i=0;i<5;i++)
+				{
+					System.out.println("final time for opponent " + i + ": " + opponents[i].fastestTime);
+				}
 				leg += 1;
 				return;
 			}
 		}
 
 		// Otherwise increment the leg and reset the gamestate
-		if (player.isFinished(timer)) {
-			System.out.println(player.fastestTime);
+		if (player.isFinished(timer) && opponentsFinished) {
 			leg += 1;
 			reset();
 		}
