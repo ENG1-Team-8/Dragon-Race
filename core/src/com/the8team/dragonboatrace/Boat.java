@@ -11,6 +11,14 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class Boat extends MovingObject {
 
+	//Boat selection
+	static Object[] red = {720, 128, 50, 10, 1000, 5f, 2.0f, "sprites/red_boat.png"};
+	static Object[] purple = {720, 224, 55, 10, 1000, 10f, 2.0f, "sprites/purple_boat.png"};
+	static Object[] blue = {720, 320, 50, 10, 1000, 5f, 2.0f, "sprites/blue_boat.png"};
+	static Object[] green = {720, 416, 50, 10, 1000, 5f, 2.0f, "sprites/green_boat.png"};
+	static Object[] yellow = {720, 512, 50, 10, 1000, 5f, 2.0f, "sprites/yellow_boat.png"};
+	static Object[] pink = {720, 608, 50, 10, 1000, 5f, 2.0f, "sprites/pink_boat.png"};
+
 	// Boat characteristics
 	int health;
 	int initialHealth;
@@ -115,7 +123,7 @@ public class Boat extends MovingObject {
 	 */
 	public boolean inLane() {
 		// If the boat exceeded its lane bounds...
-		if ((this.getPosition().y) * MovingObject.scale > yMax || (this.getPosition().y) * MovingObject.scale < yMin) {
+		if ((this.getPosition().y) * Utils.scale > yMax || (this.getPosition().y) * Utils.scale < yMin) {
 			return false;
 		}
 		return true;
@@ -169,7 +177,7 @@ public class Boat extends MovingObject {
 	 * @return true if finished, false otherwise
 	 */
 	public boolean isFinished(float timer) {
-		if (this.getPosition().x * DragonBoatRace.scale > 6320) {
+		if (this.getPosition().x * Utils.scale > 6320) {
 			// Updates the boat's fastest time
 			this.fastestTime=Math.min(this.fastestTime, timer);
 			return true;
@@ -186,11 +194,15 @@ public class Boat extends MovingObject {
 	public void reset() {
 
 		// Reposition boat to initial position
-		this.bBody.setTransform(this.initialX / MovingObject.scale, this.initialY / MovingObject.scale, 0);
+		this.bBody.setTransform(this.initialX / Utils.scale, this.initialY / Utils.scale, 0);
 		this.health = initialHealth;
 		this.stamina = initialStamina;
 		this.broken = false;
 		this.mvmntSpeed = 0;
+	}
+
+	public void setBroken(boolean broken) {
+		this.broken = broken;
 	}
 
 	public boolean isBroken() {
@@ -200,4 +212,9 @@ public class Boat extends MovingObject {
 	public float getFastestTime() {
 		return this.fastestTime;
 	}
+
+	public void resetFastestTime() {
+		this.fastestTime = 1000f;
+	}
+
 }

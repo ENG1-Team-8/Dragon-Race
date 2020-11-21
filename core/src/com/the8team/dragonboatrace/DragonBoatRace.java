@@ -29,15 +29,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 	OrthogonalTiledMapRenderer tmr;
 	TiledMap map;
 
-	// Game scale
-	static float scale = 16;
-
 	// Box2d and objects
 	Box2DDebugRenderer dr;
 	World world;
 	Player player;
-	Opponent[] opponents;
-	TargetableObject[] finishLine;
+	ArrayList<Opponent> opponents;
+	TargetableObject finishLine;
 
 	ArrayList<Obstacle> obs, lateObs;
 
@@ -50,7 +47,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 	// Leg counting and timing
 	int leg;
 	float timer;
-	boolean finished = false;
+	boolean started, finished, dnq;
 
 	// Music
 	Sound startMusic;
@@ -73,8 +70,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);
 
-		// Set the leg
+		// Set the leg and booleans
 		leg = 1;
+		finished = false;
+		dnq = false;
 
 		// Create a box2d world to hold the objects
 		world = new World(new Vector2(0, 0), false);
@@ -86,28 +85,24 @@ public class DragonBoatRace extends ApplicationAdapter {
 		// startMusic.play(0.2f);
 
 		// Create the player
-		player = new Player(720, 224, 55, 10, 1000, 6f, 2.0f, world, "sprites/purple_boat.png");
+		player = new Player(Boat.purple, world);
 
 		// Create the opponents
-		opponents = new Opponent[5];
-		finishLine = new TargetableObject[5];
+		opponents = new ArrayList<Opponent>();
 
-		opponents[0] = new Opponent(720, 128, 50, 10, 1000, 5f, 2.0f, world, "sprites/red_boat.png");
-		opponents[1] = new Opponent(720, 320, 50, 10, 1000, 5f, 2.0f, world, "sprites/blue_boat.png");
-		opponents[2] = new Opponent(720, 416, 50, 10, 1000, 5f, 2.0f, world, "sprites/green_boat.png");
-		opponents[3] = new Opponent(720, 512, 50, 10, 1000, 5f, 2.0f, world, "sprites/yellow_boat.png");
-		opponents[4] = new Opponent(720, 608, 50, 10, 1000, 5f, 2.0f, world, "sprites/pink_boat.png");
+		opponents.add(0, new Opponent(Boat.red, world));
+		opponents.add(1, new Opponent(Boat.blue, world));
+		opponents.add(2, new Opponent(Boat.green, world));
+		opponents.add(3, new Opponent(Boat.yellow, world));
+		opponents.add(4, new Opponent(Boat.pink, world));
 
-		finishLine[0] = new TargetableObject(6376, 124, 16, 90, world, "sprites/red_boat.png");
-		finishLine[1] = new TargetableObject(6376, 316, 16, 92, world, "sprites/red_boat.png");
-		finishLine[2] = new TargetableObject(6376, 412, 16, 92, world, "sprites/red_boat.png");
-		finishLine[3] = new TargetableObject(6376, 508, 16, 92, world, "sprites/red_boat.png");
-		finishLine[4] = new TargetableObject(6376, 600, 16, 90, world, "sprites/red_boat.png");
+		// Creat the finish line for AI to track
+		finishLine = new TargetableObject(6380, 412, 16, 90, world);
 
 
 		// Make opponents move towards the finish line
-		for (int i = 0; i < 5; i++) {
-			opponents[i].arriveAt(finishLine[i]);
+		for (Opponent opponent : opponents) {
+			opponent.arriveAt(finishLine);
 		}
 
 		// Obstacle list creation
@@ -223,7 +218,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		updateUI();
 
 		// Debug renderer
-		dr.render(world, camera.combined.scl(scale));
+		dr.render(world, camera.combined.scl(Utils.scale));
 
 		// Allows game to be quit with escape key
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
@@ -243,7 +238,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		updateCollisionBodies();
 
 		// Increments timer
-		timer += delta;
+		if(player.isStarted()) timer += delta;
 
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
@@ -261,17 +256,17 @@ public class DragonBoatRace extends ApplicationAdapter {
 		}
 
 		// Opponents' movement and behavior
-		if (player.isStarted()) {
-			for (Opponent opponent : opponents) {
-				opponent.update(delta);
-					for (Obstacle obstacle : obs)
-					{
-						opponent.avoidObstacle(obstacle, delta);
-					}
-				for (Obstacle obstacle : lateObs)
+		for (Opponent opponent : opponents) {
+			if (!player.isStarted()) opponent.setBroken(true);
+			else opponent.setBroken(false);
+			opponent.update(delta);
+				for (Obstacle obstacle : obs)
 				{
 					opponent.avoidObstacle(obstacle, delta);
 				}
+			for (Obstacle obstacle : lateObs)
+			{
+				opponent.avoidObstacle(obstacle, delta);
 			}
 		}
 
@@ -300,7 +295,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 		Vector3 position = camera.position;
 
 		// Take the players position correctly scaled
-		position.x = player.getPosition().x * scale;
+		position.x = player.getPosition().x * Utils.scale;
 
 		// Follow the y-centre of the map
 		position.y = 720 / 2f;
@@ -316,12 +311,12 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 		// Renders a rectangle with transformed player health as width
 		healthBar.begin(ShapeRenderer.ShapeType.Filled);
-		healthBar.rect(615, (player.getPosition().y * scale) + 16, player.health * 5, 5);
+		healthBar.rect(615, (player.getPosition().y * Utils.scale) + 16, player.health * 5, 5);
 		healthBar.end();
 
 		// Renders a rectangle with transformed player stamina as width
 		staminaBar.begin(ShapeRenderer.ShapeType.Filled);
-		staminaBar.rect(615, (player.getPosition().y * scale) + 10, player.stamina / 20, 5);
+		staminaBar.rect(615, (player.getPosition().y * Utils.scale) + 10, player.stamina / 20, 5);
 		staminaBar.end();
 
 		uiBatch.begin();
@@ -374,12 +369,25 @@ public class DragonBoatRace extends ApplicationAdapter {
 		if (player.isFinished(timer) && opponentsFinished) {
 			leg += 1;
 			if (leg == 4) {
-				// TO DO: check qualification
+				opponents.sort(Utils.boatSorter);
+				if (player.getFastestTime() < opponents.get(2).getFastestTime()) {
+					for (int i=0; i<3; i++){
+						if (i <= 1) {
+							opponents.get(i).resetFastestTime();
+						}
+						opponents.remove(opponents.size() - 1);
+						}
+					player.resetFastestTime();
+					reset();
+				} else {
+					finished = true;
+					dnq = true;
+				}
 			} else if (leg == 5) {
 				// If final leg, do not reset gamestate
 				System.out.println("final time: " + player.getFastestTime());
-				for(int i=0;i<5;i++) {
-					System.out.println("final time for opponent " + i + ": " + opponents[i].getFastestTime());
+				for(int i=0;i<opponents.size();i++) {
+					System.out.println("final time for opponent " + i + ": " + opponents.get(i).getFastestTime());
 				}
 				finished = true;
 			} else {
@@ -432,12 +440,20 @@ public class DragonBoatRace extends ApplicationAdapter {
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			tmr.render();
-			uiBatch.begin();
-			uiBatch.draw(endScreen, 0, 0);
-			uiBatch.end();
+
+			if (dnq) {
+				uiBatch.begin();
+				uiBatch.draw(dnqScreen, 0, 0);
+				uiBatch.end();
+			} else {
+				uiBatch.begin();
+				uiBatch.draw(endScreen, 0, 0);
+				uiBatch.end();
+			}
 
 			// Exits the game if escape is pressed
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) create();
 			return true;
 		}
 		return false;

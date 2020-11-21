@@ -1,5 +1,7 @@
 package com.the8team.dragonboatrace;
 
+import java.util.Comparator;
+
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -19,6 +21,12 @@ public class Utils {
 
     // Game scale
     static float scale = 16;
+
+    static Comparator<Opponent> boatSorter = new Comparator<Opponent>() {
+            public int compare(Opponent o1, Opponent o2) {
+                return Float.compare(o1.getFastestTime(), o2.getFastestTime());
+            }
+    };
 
     /**
      * Parses the tiled map for objects in the given 'objects' object and creates

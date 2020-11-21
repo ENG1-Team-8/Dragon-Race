@@ -33,6 +33,20 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 		this.steerOutput = new SteeringAcceleration<>(new Vector2());
 	}
 
+	public Opponent(Object[] boat, World world) {
+
+		// Creates a MovingObject with relevant attributes
+		super((int) boat[0], (int) boat[1], (int) boat[2], (int) boat[3], (int) boat[4], (float) boat[5],
+				(float) boat[6], world, (String) boat[7]);
+		this.setMaxLinearSpeed((int) boat[2]);
+		this.setMaxAngularSpeed((int) boat[2]);
+		this.orientation = this.bBody.getAngle();
+		this.tagged = false;
+		this.boundingRadius = 48;
+		this.steerOutput = new SteeringAcceleration<>(new Vector2());
+
+	}
+
 	// updates the behavior and acceleration based on delta
 	public void update(float delta) {
 		this.updateStamina();
@@ -78,19 +92,19 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 
 		// stop it from getting out its lane
 
-		if ((this.getPosition().y + 1) * scale >= yMax) {
+		if ((this.getPosition().y + 1) * Utils.scale >= yMax) {
 			this.updateMovement(0, -1, delta);
-		} else if ((this.getPosition().y - 1) * scale <= yMin) {
+		} else if ((this.getPosition().y - 1) * Utils.scale <= yMin) {
 			this.updateMovement(0, 1, delta);
 		}
 
 		// keep the boats in the first and last lane from getting stuck at the edge
 		if (yMax >= 600) {
-			if (((this.getPosition().y + 1) * scale) + 8 >= yMax) {
+			if (((this.getPosition().y + 1) * Utils.scale) + 8 >= yMax) {
 				this.updateMovement(0, -1, delta);
 			}
 		} else if (yMin <= 100) {
-			if ((this.getPosition().y - 1) * scale - 8 <= yMin) {
+			if ((this.getPosition().y - 1) * Utils.scale - 8 <= yMin) {
 				this.updateMovement(0, 1, delta);
 			}
 		}

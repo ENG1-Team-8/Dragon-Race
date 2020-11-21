@@ -66,7 +66,7 @@ public class Obstacle extends MovingObject{
 
     public boolean isOffScreen(int playerX) {
 
-        float x = this.getPosition().x * DragonBoatRace.scale;
+        float x = this.getPosition().x * Utils.scale;
         float screenWidth = Gdx.graphics.getWidth();
 
         if (x < playerX - screenWidth / 2) {
