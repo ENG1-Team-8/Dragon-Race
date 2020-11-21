@@ -35,6 +35,13 @@ public class Player extends Boat {
 		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
 	}
 
+	public Player(Object[] boat, World world) {
+
+		// Creates a MovingObject with relevant attributes
+		super((int)boat[0], (int)boat[1], (int)boat[2], (int)boat[3], (int)boat[4], (float)boat[5], (float)boat[6], world, (String)boat[7]);
+
+		}
+
 	/**
 	 * Updates the forces applied to the player's boat according to their input
 	 * 
@@ -67,10 +74,22 @@ public class Player extends Boat {
 
 	}
 
+	@Override
+	public void reset() {
+
+		// Reposition boat to initial position
+		this.bBody.setTransform(this.initialX / Utils.scale, this.initialY / Utils.scale, 0);
+		this.health = initialHealth;
+		this.stamina = initialStamina;
+		this.broken = false;
+		this.mvmntSpeed = 0;
+		this.started = false;
+	}
+
 	// As all of the obstacles move, there ends up not being any at the end
 	// This detects when the player is near the end to spawn new obstacles
 	public boolean lateGame() {
-		if (this.getPosition().x * DragonBoatRace.scale > 4930) {
+		if (this.getPosition().x * Utils.scale > 4930) {
 			return true;
 		} else {
 			return false;
@@ -80,5 +99,4 @@ public class Player extends Boat {
 	public boolean isStarted() {
 		return this.started;
 	}
-
 }

@@ -18,9 +18,6 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class MovingObject {
 
-	// Game scaling
-	static float scale = 16;
-
 	// Visuals and physics
 	Body bBody;
 	Texture sprite;
@@ -69,8 +66,8 @@ public class MovingObject {
 		// Checks that the object has a sprite/texture
 		if (this.sprite != null) {
 			// Attaches sprite to the bottom left of the body
-			batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth() / 2f),
-					this.getPosition().y * scale - (this.sprite.getHeight() / 2f));
+			batch.draw(sprite, this.getPosition().x * Utils.scale - (this.sprite.getWidth() / 2f),
+					this.getPosition().y * Utils.scale - (this.sprite.getHeight() / 2f));
 		}
 	}
 
@@ -102,7 +99,7 @@ public class MovingObject {
 		}
 
 		// Sets the position of the body according to the scale of the game
-		def.position.set(x / scale, y / scale);
+		def.position.set(x / Utils.scale, y / Utils.scale);
 
 		// Fixes the rotation of the object
 		def.fixedRotation = true;
@@ -112,7 +109,7 @@ public class MovingObject {
 
 		// Sets the shape of the body to be a box polygon
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f / scale, height / 2f / scale);
+		shape.setAsBox(width / 2f / Utils.scale, height / 2f / Utils.scale);
 
 		// Fixes the box to the body
 		body.createFixture(shape, 1.0f);
