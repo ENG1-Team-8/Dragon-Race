@@ -456,9 +456,9 @@ public class DragonBoatRace extends Game {
 				uiBatch.draw(endScreen, 0, 0);
 				font.setColor(Color.WHITE);
 				font.getData().setScale(3f);
-				font.draw(uiBatch, "First place: " + first.getName(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/3);
-				font.draw(uiBatch, "Second place: " + second.getName(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/3 - 40);
-				font.draw(uiBatch, "Third place: " + third.getName(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/3 - 80);
+				font.draw(uiBatch, "First place: " + first.getName(), Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/3);
+				font.draw(uiBatch, "Second place: " + second.getName(), Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/3 - 60);
+				font.draw(uiBatch, "Third place: " + third.getName(), Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/3 - 120);
 				uiBatch.end();
 			}
 
