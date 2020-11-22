@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="360" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="440" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
  <tileset firstgid="1" source="test.tsx"/>
- <layer id="1" name="Tile Layer 1" width="360" height="45">
+ <layer id="1" name="Tile Layer 1" width="440" height="45">
   <data encoding="base64" compression="zlib">
-   eJzt2rFOwzAUBdBMbEgsbPwDGywVjB07MsIEnwafSZBAQpFLbVfFt9EZznKfkyaxdBWp2UzTdDO7mm1md7OLPS7NznqWeE1m/fvYsi7tHszqZl+dXNvP12ZnPUu8JrP+fWxZl3YPZnWzUj/fAjBcqZ/vARiu1M+PAAy37OeH2WulbUVWWlN7rp9823G+2uurPc9vrb9Xc2zLMaXn0XNf9nFd+3iK52rfx+77Mf0MwOnoZ4BM+hkgU+n/wffZx4JMJpPJ/jfz/gyQST8DZNLPAJn0M0Am/QyQyfcbMplMlpl5fwbIpJ8BMulngEz6GSCTfgbI5PsNmUwmy8y8PwNk0s8AmfQzQCb9DJBJPwNk8v2GTCaTZWbenwEy6WeATPoZIJN+BsiknwEy+X5DJpPJMjPvzwCZ9DNAJv0MkEk/A2TSzwCZSv28+7bvmH2zv44prT30Oy3n31WuazlP7/re6zr2+S7n9nEd+9i6l/Z9Pfte+r7uCYDhSv38DMBwpX5+A2C4Uj+/ADCcfgbI9Amy5cgE
+   eJzt27FuE0EUBdBU6ZBo6PgHOmhQKFO6pAwVfBp8Bp+GkUCyVs/xzs5ac8c+xZHIm9ndF0+UK1Yvjw8PD2+OHs8Ytfb56P3R23///hjYo7V91hJ7srb9HFv2pX0P1tatHX8f/17+jn7tPq3P3XP/u8C1lnxL7N/a+rXEnqxtP8eWfWnfg7V1a6/lW3Wf1ufutf9DqCrfRvcEQJ1vo3uqfApV5dvongCo8210T5Uvoap8G90TAHW+je6p8v3E84Wv19b2uG752T0V15+ztce19/pff95wv5bPZ819TrU+b821LddUn8eW78s53tY5XuNzde5jz/2pyLfldWt+dq69P1VPvgFwPefyjXXkG0Am+dZHvgFkkm99qvmS0T0BME++/Trxc/F1VVuzZ4/rqv+/bX22mpqamtp+tSrflnsu3ePa+//WRufrOd5PAmSq/j5gdE8zkW8AmWZ5P5lKvgFkkm995BtAJvnWx/wkQKZZ8q11dsb8pJqamtp918xP9vF+EiCT+ck+8g0g0yzvJ1PJN4BM8q2PfAPIJN/6mJ8EyDRLvrXOzpifVFNTU7vvmvnJPt5PAmQyP9lHvgFkmuX9ZCr5BpBJvvWRbwCZ5Fsf85MAmWbJt9bZGfOTampqavddMz/Zx/tJgEzmJ/vIN4BMs7yfTCXfADLJtz7yDSCTfOtjfhIg0yz51jo7Y35STU1N7b5r5if7eD8JkMn8ZB/5BpBplveTqeQbQCb51ke+AWSaLd8OG9evdV2Vb4cL12191nLvpee03P+wcl/Lfbbu39rX3j8DzvE2zrH1LJ377Zz7LPn2NVT19wGjewKgni8Z3VPlJVSVb6N7AqDOt9E9VX6EqvJtdE8A1Pk2uqfKt1BVvo3uCYA630b3NBP5BpBplnz7A3A7RXs=
   </data>
  </layer>
  <objectgroup id="5" name="Collision">
-  <object id="21" x="80" y="80">
+  <object id="21" x="688" y="80">
    <polyline points="0,0 0,560"/>
   </object>
-  <object id="22" x="80" y="640">
+  <object id="22" x="688" y="640">
    <polyline points="0,0 5680,0"/>
   </object>
-  <object id="23" x="5760" y="640">
+  <object id="23" x="6368" y="640">
    <polyline points="0,0 0,-560"/>
   </object>
-  <object id="24" x="5760" y="80">
+  <object id="24" x="6368" y="80">
    <polyline points="0,0 -5680,0"/>
   </object>
  </objectgroup>

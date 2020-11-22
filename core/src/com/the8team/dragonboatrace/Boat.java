@@ -1,150 +1,228 @@
 package com.the8team.dragonboatrace;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Boat {
+/**
+ * A boat entity extended from MovingObject
+ * 
+ * @author Matt Tomlinson
+ * @author Charlie Hayes
+ * @see MovingObject
+ */
+public class Boat extends MovingObject {
 
-	// Game scaling
-	static float scale = 16;
-	
-	// Boat visuals and physics
-	Body bBody;
-	Texture sprite;
+	// Boat selection
+	static Object[] red = { 720, 128, 50, 15, 1000, 5f, 2.0f, "red" }; // More health
+	static Object[] purple = { 720, 224, 55, 10, 1000, 5f, 2.0f, "purple" }; // Higher max speed
+	static Object[] blue = { 720, 320, 50, 10, 1200, 5f, 2.0f, "blue" };// Higher stamina
+	static Object[] green = { 720, 416, 50, 10, 1000, 6f, 2.0f, "green" };// Higher acceleration
+	static Object[] yellow = { 720, 512, 50, 10, 1000, 5f, 2.5f, "yellow" };// Higher maneuverability
+	static Object[] pink = { 720, 608, 52, 12, 1100, 5.5f, 2.25f, "pink" };// All rounder
 
 	// Boat characteristics
-	float mvmntSpeed = 0;
-	float maxSpeed = 5;
-    int health;
-    int stamina;
-    float acceleration;
+	int health;
+	int initialHealth;
+	float stamina;
+	float initialStamina;
+	float acceleration;
 	float maneuverability;
+	int maxSpeed;
 
-	// Time tracking
-	float fastestTime;
+	// Time tracking set to initial high value
+	float fastestTime = 10000000;
+
+	// Lane check
+	float yMax;
+	float yMin;
+
+	// Booleans
+	Boolean outOfStamina = false, broken = false;
+
+	// Name of boat (for selection)
+	String name;
 
 	/**
 	 * Constructs a boat object
+	 * <p>
+	 * Takes a world object to create a box2d body within the world and store
+	 * relevant characteristics.
 	 * 
-	 * Takes a world object to create a box2d body within the world
+	 * @see Player
+	 * @see Opponent
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param isStatic
-	 * @param health
-	 * @param stamina
-	 * @param acceleration
-	 * @param maneuverability
-	 * @param world
+	 * @param x               The starting x coordinate
+	 * @param y               The starting y coordinate
+	 * @param maxSpeed        The maximum speed of the boat
+	 * @param health          The boat's health
+	 * @param stamina         The stamina of the boat
+	 * @param acceleration    The boat's acceleration
+	 * @param maneuverability How quickly the boat can move side to side
+	 * @param world           The world in which to create the boat
+	 * @param name     The texture location
 	 */
-	public Boat(int x, int y, int width, int height, boolean isStatic, int health,
-						int stamina, float acceleration, float maneuverability, World world) {
+	public Boat(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
+			World world, String name) {
 
-		// Creates the box2d body in the game world
-		this.bBody = createBox(x, y, width, height, isStatic, world);
+		// Creates a MovingObject with relevant attributes
+		super(x, y, 48, 16, world, "sprites/"+name+"_boat.png");
 
 		// Sets other relevant properties
+		this.maxSpeed = maxSpeed;
 		this.health = health;
+		this.initialHealth = health;
 		this.stamina = stamina;
+		this.initialStamina = stamina;
 		this.acceleration = acceleration;
 		this.maneuverability = maneuverability;
-	}
-	
-	/**
-	 * Draws the sprite for the boat on screen
-	 * 
-	 * @param batch
-	 */
-	public void draw(Batch batch) {
-		// Attaches sprite to the bottom left of the boats body
-		batch.draw(sprite, this.getPosition().x * scale - (this.sprite.getWidth()/2), this.getPosition().y * scale - (this.sprite.getHeight()/2));
-	}
-
-	/**
-	 * Generates a box2d body for the boat
-	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param isStatic
-	 * @param world
-	 * @return
-	 */
-    public Body createBox(int x, int y, int width, int height, boolean isStatic, World world) {
-
-		// Creates a body and body definition (properties for a body)
-		Body body;
-		BodyDef def = new BodyDef();
-
-		// Allows the programmer to define whether a body is static or not
-		if(isStatic) {
-			def.type = BodyDef.BodyType.StaticBody;
-		} else {
-			def.type = BodyDef.BodyType.DynamicBody;
-		}
-
-		// Sets the position of the boat's body according to the scale of the game
-		def.position.set(x/scale, y/scale);
-
-		// Fixes the rotation of the boat
-		def.fixedRotation = true;
-
-		// Adds the boat body to the game world
-		body = world.createBody(def);
-
-		// Sets the shape of the body to be a box polygon
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width/2/scale, height/2/scale);
-
-		// Fixes the box to the body
-		body.createFixture(shape, 1.0f);
-
-		// Disposes of the used shape
-		shape.dispose();
-		return body;
-	}
-
-	/**
-	 * Returns the position of the boat
-	 * 
-	 * @return
-	 */
-	public Vector2 getPosition() {
-		return this.bBody.getPosition();
+		this.yMin = y - 56;
+		this.yMax = y + 40;
+		this.name = name;
+    
 	}
 
 	/**
 	 * Updates the movement properties of the boat
+	 * <p>
+	 * The forces take values 1 or 0 typically to represent whether or not a force
+	 * is being applied.
 	 * 
-	 * The forces take values 1 or 0 typically to represent whether or not a force is being applied
-	 * 
-	 * @param horizontalForce
-	 * @param verticalForce
-	 * @param delta
+	 * @param horizontalForce Whether the boat is undergoing horizontal force (-1
+	 *                        left, 1 right)
+	 * @param verticalForce   Whether the boat is undergoing vertical force (-1
+	 *                        down, 1 up)
+	 * @param delta           The delta time between frames
 	 */
 	public void updateMovement(int horizontalForce, int verticalForce, float delta) {
-
 		// Accelerates the boat over a set time regardless of framerate
-		this.mvmntSpeed += horizontalForce * this.acceleration * delta;
+		this.mvmntSpeed += horizontalForce * this.acceleration * delta;// * (stamina / 1000))
 
-		// Stops the boat from going backwards
-		if(this.mvmntSpeed < 0) {
+		// Stops the boat from going backwards or moving when broken
+		if (this.mvmntSpeed < 0 || this.broken) {
 			this.mvmntSpeed = 0;
-		
-		// Caps the boats maximum speed
-		} else if(this.mvmntSpeed > this.maxSpeed) {
+			verticalForce = 0;
+		}
+		// checks if the boat is out of stamina
+		else if (this.outOfStamina) {
+			this.mvmntSpeed = 0;
+		}
+		// Caps the boats speed to its maximum speed
+		else if (this.mvmntSpeed > this.maxSpeed) {
 			this.mvmntSpeed = this.maxSpeed;
 		}
-
-		// Sets the boats velocity
-		this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * this.maneuverability);
+		// Sets the boats velocity and checks if boat is in its lane
+		if (this.inLane()) {
+			this.bBody.setLinearVelocity(this.mvmntSpeed, verticalForce * (this.maneuverability * (stamina / 1000)));
+		} else {
+			// Applies halved velocity if out of lane to simulate a time penalty visually
+			this.bBody.setLinearVelocity(this.mvmntSpeed / 2,
+					verticalForce * (this.maneuverability * (stamina / 1000)));
+		}
 	}
+
+	/**
+	 * Checks if the boat is within its lane
+	 * 
+	 * 
+	 * @return true if in lane, false otherwise
+	 */
+	public boolean inLane() {
+		// If the boat exceeded its lane bounds...
+		if ((this.getPosition().y) * Utils.scale > yMax || (this.getPosition().y) * Utils.scale < yMin) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Updates the boat's health
+	 * <p>
+	 * Subtracts the damage taken from the boat's health and sets broken=true if
+	 * health less than or equal to 0
+	 * 
+	 * @param damage The damage to apply
+	 */
+	public void updateHealth(int damage) {
+		this.health -= damage;
+		if (this.health <= 0) {
+			this.broken = true;
+		}
+	}
+
+	/**
+	 * Updates the boat's stamina based on it's speed
+	 * 
+	 */
+	public void updateStamina() {
+		// If movement speed is positive reduce stamina
+		if (this.mvmntSpeed > 5) {
+			this.stamina -= this.mvmntSpeed / 10;
+		}
+		// Otherwise add stamina but not over max
+		else if (stamina < this.initialStamina) {
+			this.stamina += 10;
+		}
+		// Tells updateMovement that the boat is out of stamina
+		if (this.stamina <= 0) {
+			this.outOfStamina = true;
+		}
+		// Tells updateMovement that the boat has stamina
+		else {
+			this.outOfStamina = false;
+		}
+	}
+
+	/**
+	 * Checks if the boat has finished the race
+	 * <p>
+	 * Compares boat's x position to the position of the finish line
+	 * 
+	 * @param timer The current leg's time
+	 * 
+	 * @return true if finished, false otherwise
+	 */
+	public boolean isFinished(float timer) {
+		if (this.getPosition().x * Utils.scale > 6320) {
+			// Updates the boat's fastest time
+			this.fastestTime = Math.min(this.fastestTime, timer);
+			return true;
+		} else if (this.isBroken() == true) {
+			// Does not update fastest time as DNF, just returns true
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Resets the boat to its initial position, stamina and health. Zeros speed.
+	 */
+	public void reset() {
+
+		// Reposition boat to initial position
+		this.bBody.setTransform(this.initialX / Utils.scale, this.initialY / Utils.scale, 0);
+		this.health = initialHealth;
+		this.stamina = initialStamina;
+		this.broken = false;
+		this.mvmntSpeed = 0;
+	}
+
+	public void setBroken(boolean broken) {
+		this.broken = broken;
+	}
+
+	public boolean isBroken() {
+		return this.broken;
+	}
+
+	public float getFastestTime() {
+		return this.fastestTime;
+	}
+
+	public void resetFastestTime() {
+		this.fastestTime = 1000f;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
 }
