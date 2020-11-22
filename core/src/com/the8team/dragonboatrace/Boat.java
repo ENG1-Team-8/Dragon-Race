@@ -38,9 +38,6 @@ public class Boat extends MovingObject {
 	// Booleans
 	Boolean outOfStamina = false, broken = false;
 
-	//name of boat (for selection)
-	String name;
-
 	/**
 	 * Constructs a boat object
 	 * <p>
@@ -76,8 +73,6 @@ public class Boat extends MovingObject {
 		this.maneuverability = maneuverability;
 		this.yMin = y - 56;
 		this.yMax = y + 40;
-		this.name = textureFile;
-
 	}
 
 	/**
