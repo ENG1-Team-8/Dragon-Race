@@ -77,7 +77,7 @@ public class Boat extends MovingObject {
 		this.yMin = y - 56;
 		this.yMax = y + 40;
 		this.name = name;
-
+    
 	}
 
 	/**
