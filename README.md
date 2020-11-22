@@ -12,7 +12,7 @@ Created by [***Raymond "Raeleus" Buckley***](http://www.badlogicgames.com/forum/
 
 ## Dragon Boat Race: The Game Licence
 
-All rights to any use of this game goes to:
+All rights to any use of this game goes to:   
 Matthew Tomlinson,   
 Ionut Manasia,   
 Matilda Garcia,   
