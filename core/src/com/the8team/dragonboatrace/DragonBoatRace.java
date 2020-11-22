@@ -3,7 +3,7 @@ package com.the8team.dragonboatrace;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -21,8 +21,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class DragonBoatRace extends ApplicationAdapter {
+public class DragonBoatRace extends Game {
+
+	//Title Screen
+	Skin gameSkin;
+	Boolean play = false;
 
 	// Camera and map
 	OrthographicCamera camera;
@@ -61,6 +66,10 @@ public class DragonBoatRace extends ApplicationAdapter {
 	@Override
 	public void create() {
 
+		//display title screen
+		gameSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+		this.setScreen(new TitleScreen(this));
+
 		// Get height and width of window for camera
 		Gdx.graphics.setWindowedMode(1280, 720);
 		float w = Gdx.graphics.getWidth();
@@ -84,26 +93,8 @@ public class DragonBoatRace extends ApplicationAdapter {
 		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
 		// startMusic.play(0.2f);
 
-		// Create the player
-		player = new Player(Boat.purple, world);
-
-		// Create the opponents
-		opponents = new ArrayList<Opponent>();
-
-		opponents.add(0, new Opponent(Boat.red, world));
-		opponents.add(1, new Opponent(Boat.blue, world));
-		opponents.add(2, new Opponent(Boat.green, world));
-		opponents.add(3, new Opponent(Boat.yellow, world));
-		opponents.add(4, new Opponent(Boat.pink, world));
-
 		// Creat the finish line for AI to track
 		finishLine = new TargetableObject(6380, 412, 16, 90, world);
-
-
-		// Make opponents move towards the finish line
-		for (Opponent opponent : opponents) {
-			opponent.arriveAt(finishLine);
-		}
 
 		// Obstacle list creation
 		obs = new ArrayList<>();
@@ -174,55 +165,59 @@ public class DragonBoatRace extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-
-		// Update finished screen
-		if(updateFinished()) return;
-
-		// Updates game logic
-		update(Gdx.graphics.getDeltaTime());
-
-		// Clear the screen and render the map
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		tmr.render();
-
-		// Uses sprite batch to render object textures
-		// Use draw functions here
-		batch.begin();
-
-		// Draw obstacles
-		for (Obstacle obstacle : obs) {
-			obstacle.draw(batch);
+		if (!this.play){
+			screen.render(Gdx.graphics.getDeltaTime());
 		}
+		else{
+			// Update finished screen
+			if(updateFinished()) return;
 
-		// Draw late game obstacle
-		for (Obstacle obstacle : lateObs) {
-			obstacle.draw(batch);
+			// Updates game logic
+			update(Gdx.graphics.getDeltaTime());
+
+			// Clear the screen and render the map
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			tmr.render();
+
+			// Uses sprite batch to render object textures
+			// Use draw functions here
+			batch.begin();
+
+			// Draw obstacles
+			for (Obstacle obstacle : obs) {
+				obstacle.draw(batch);
+			}
+
+			// Draw late game obstacle
+			for (Obstacle obstacle : lateObs) {
+				obstacle.draw(batch);
+			}
+
+			// Draw player
+			player.draw(batch);
+
+			// Draw opponents
+			for (Opponent opponent : opponents) {
+				opponent.draw(batch);
+			}
+
+			batch.end();
+
+			// Update broken player screen
+			if (updateBroken()) return;
+
+			// Update the ui
+			updateUI();
+
+			// Debug renderer
+			dr.render(world, camera.combined.scl(Utils.scale));
+
+			// Allows game to be quit with escape key
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+				Gdx.app.exit();
 		}
-
-		// Draw player
-		player.draw(batch);
-
-		// Draw opponents
-		for (Opponent opponent : opponents) {
-			opponent.draw(batch);
-		}
-
-		batch.end();
-
-		// Update broken player screen
-		if (updateBroken()) return;
-
-		// Update the ui
-		updateUI();
-
-		// Debug renderer
-		dr.render(world, camera.combined.scl(Utils.scale));
-
-		// Allows game to be quit with escape key
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-			Gdx.app.exit();
 	}
 
 	/**
@@ -364,7 +359,7 @@ public class DragonBoatRace extends ApplicationAdapter {
 				continue;
 			}
 		}
-
+		
 		// Otherwise increment the leg and reset the gamestate
 		if (player.isFinished(timer) && opponentsFinished) {
 			leg += 1;
