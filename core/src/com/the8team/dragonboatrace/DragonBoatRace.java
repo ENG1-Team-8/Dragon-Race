@@ -160,6 +160,8 @@ public class DragonBoatRace extends Game {
 		// Reset timer
 		timer = 0f;
 
+		finished = false;
+
 	}
 
 	@Override
@@ -252,8 +254,7 @@ public class DragonBoatRace extends Game {
 
 		// Opponents' movement and behavior
 		for (Opponent opponent : opponents) {
-			if (!player.isStarted()) opponent.setBroken(true);
-			else opponent.setBroken(false);
+			if (!player.isStarted()) opponent.mvmntSpeed = 0;
 			opponent.update(delta);
 				for (Obstacle obstacle : obs)
 				{
