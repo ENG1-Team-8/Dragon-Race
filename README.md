@@ -20,6 +20,6 @@ Josh Stafford,
 David Kayode,   
 Charlie Hayes   
 
-You must give us all money you make from this game
-Any fame made from this game (Twitch Youtube etc.) must be attributed to us in EVERY way
-Any bugs or problems in the game are not our fault they are yours
+You must give us all money you make from this game.   
+Any fame made from this game (Twitch Youtube etc.) must be attributed to us in EVERY way.   
+Any bugs or problems in the game are not our fault they are yours.   
