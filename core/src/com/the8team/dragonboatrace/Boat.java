@@ -11,13 +11,13 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class Boat extends MovingObject {
 
-	//Boat selection
-	static Object[] red = {720, 128, 50, 15, 1000, 5f, 2.0f, "sprites/red_boat.png"}; //more health
-	static Object[] purple = {720, 224, 55, 10, 1000, 5f, 2.0f, "sprites/purple_boat.png"}; //higher max speed
-	static Object[] blue = {720, 320, 50, 10, 1200, 5f, 2.0f, "sprites/blue_boat.png"};//higher stamina
-	static Object[] green = {720, 416, 50, 10, 1000, 6f, 2.0f, "sprites/green_boat.png"};//higher acceleration
-	static Object[] yellow = {720, 512, 50, 10, 1000, 5f, 2.5f, "sprites/yellow_boat.png"};//higher maneuverability
-	static Object[] pink = {720, 608, 52, 12, 1100, 5.5f, 2.25f, "sprites/pink_boat.png"};//all rounder
+	// Boat selection
+	static Object[] red = { 720, 128, 50, 15, 1000, 5f, 2.0f, "red" }; // More health
+	static Object[] purple = { 720, 224, 55, 10, 1000, 5f, 2.0f, "purple" }; // Higher max speed
+	static Object[] blue = { 720, 320, 50, 10, 1200, 5f, 2.0f, "blue" };// Higher stamina
+	static Object[] green = { 720, 416, 50, 10, 1000, 6f, 2.0f, "green" };// Higher acceleration
+	static Object[] yellow = { 720, 512, 50, 10, 1000, 5f, 2.5f, "yellow" };// Higher maneuverability
+	static Object[] pink = { 720, 608, 52, 12, 1100, 5.5f, 2.25f, "pink" };// All rounder
 
 	// Boat characteristics
 	int health;
@@ -38,6 +38,9 @@ public class Boat extends MovingObject {
 	// Booleans
 	Boolean outOfStamina = false, broken = false;
 
+	// Name of boat (for selection)
+	String name;
+
 	/**
 	 * Constructs a boat object
 	 * <p>
@@ -55,13 +58,13 @@ public class Boat extends MovingObject {
 	 * @param acceleration    The boat's acceleration
 	 * @param maneuverability How quickly the boat can move side to side
 	 * @param world           The world in which to create the boat
-	 * @param textureFile     The texture location
+	 * @param name     The texture location
 	 */
 	public Boat(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
-			World world, String textureFile) {
+			World world, String name) {
 
 		// Creates a MovingObject with relevant attributes
-		super(x, y, 48, 16, world, textureFile);
+		super(x, y, 48, 16, world, "sprites/"+name+"_boat.png");
 
 		// Sets other relevant properties
 		this.maxSpeed = maxSpeed;
@@ -73,6 +76,8 @@ public class Boat extends MovingObject {
 		this.maneuverability = maneuverability;
 		this.yMin = y - 56;
 		this.yMax = y + 40;
+		this.name = name;
+    
 	}
 
 	/**
@@ -89,7 +94,7 @@ public class Boat extends MovingObject {
 	 */
 	public void updateMovement(int horizontalForce, int verticalForce, float delta) {
 		// Accelerates the boat over a set time regardless of framerate
-		this.mvmntSpeed += horizontalForce * this.acceleration * delta;// * (stamina / 1000)) 
+		this.mvmntSpeed += horizontalForce * this.acceleration * delta;// * (stamina / 1000))
 
 		// Stops the boat from going backwards or moving when broken
 		if (this.mvmntSpeed < 0 || this.broken) {
@@ -178,7 +183,7 @@ public class Boat extends MovingObject {
 	public boolean isFinished(float timer) {
 		if (this.getPosition().x * Utils.scale > 6320) {
 			// Updates the boat's fastest time
-			this.fastestTime=Math.min(this.fastestTime, timer);
+			this.fastestTime = Math.min(this.fastestTime, timer);
 			return true;
 		} else if (this.isBroken() == true) {
 			// Does not update fastest time as DNF, just returns true
@@ -214,6 +219,10 @@ public class Boat extends MovingObject {
 
 	public void resetFastestTime() {
 		this.fastestTime = 1000f;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 
 }
