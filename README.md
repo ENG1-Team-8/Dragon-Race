@@ -13,12 +13,12 @@ Created by [***Raymond "Raeleus" Buckley***](http://www.badlogicgames.com/forum/
 ## Dragon Boat Race: The Game Licence
 
 All rights to any use of this game goes to:
-Matthew Tomlinson
-Ionut Manasia
-Matilda Garcia
-Josh Stafford
-David Kayode
-Charlie Hayes
+Matthew Tomlinson,   
+Ionut Manasia,   
+Matilda Garcia,   
+Josh Stafford,   
+David Kayode,   
+Charlie Hayes   
 
 You must give us all money you make from this game
 Any fame made from this game (Twitch Youtube etc.) must be attributed to us in EVERY way
