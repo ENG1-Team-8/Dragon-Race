@@ -66,12 +66,11 @@ public class DragonBoatRace extends Game {
 	@Override
 	public void create() {
 
-		//display title screen
+		// Display title screen
 		gameSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 		this.setScreen(new TitleScreen(this));
 
 		// Get height and width of window for camera
-		Gdx.graphics.setWindowedMode(1280, 720);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
@@ -136,7 +135,7 @@ public class DragonBoatRace extends Game {
 		staminaBar = new ShapeRenderer();
 		staminaBar.setColor(0, 1, 0, 0);
 
-		// Create the screens and ui
+		// Create the ui
 		brokenScreen = new Texture("ui/brokenScreen.png");
 		endScreen = new Texture("ui/endScreen.png");
 		dnqScreen = new Texture("ui/dnqScreen.png");
@@ -165,6 +164,7 @@ public class DragonBoatRace extends Game {
 
 	@Override
 	public void render() {
+		//If the game is set to play
 		if (!this.play){
 			screen.render(Gdx.graphics.getDeltaTime());
 		}
@@ -379,11 +379,7 @@ public class DragonBoatRace extends Game {
 					dnq = true;
 				}
 			} else if (leg == 5) {
-				// If final leg, do not reset gamestate
-				System.out.println("final time: " + player.getFastestTime());
-				for(int i=0;i<opponents.size();i++) {
-					System.out.println("final time for opponent " + i + ": " + opponents.get(i).getFastestTime());
-				}
+				// If final leg, do not reset gamestate and set finished to true
 				finished = true;
 			} else {
 				reset();
@@ -441,14 +437,34 @@ public class DragonBoatRace extends Game {
 				uiBatch.draw(dnqScreen, 0, 0);
 				uiBatch.end();
 			} else {
+				Boat first, second, third;
+				opponents.sort(Utils.boatSorter);
+				if (player.getFastestTime() < opponents.get(0).getFastestTime()) {
+					first = player;
+					second = opponents.get(0);
+					third = opponents.get(1);
+				} else if (player.getFastestTime() < opponents.get(1).getFastestTime()) {
+					first = opponents.get(0);
+					second = player;
+					third = opponents.get(1);
+				} else {
+					first = opponents.get(0);
+					second = opponents.get(1);
+					third = player;
+				}
 				uiBatch.begin();
 				uiBatch.draw(endScreen, 0, 0);
+				font.setColor(Color.WHITE);
+				font.getData().setScale(3f);
+				font.draw(uiBatch, "First place: " + first.getName(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/3);
+				font.draw(uiBatch, "Second place: " + second.getName(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/3 - 40);
+				font.draw(uiBatch, "Third place: " + third.getName(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/3 - 80);
 				uiBatch.end();
 			}
 
 			// Exits the game if escape is pressed
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
-			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) create();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) reset();
 			return true;
 		}
 		return false;
@@ -462,7 +478,7 @@ public class DragonBoatRace extends Game {
 			uiBatch.end();
 
 			// Restarts the game if player presses enter key
-			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) create();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) reset();
 			return true;
 		}
 		return false;

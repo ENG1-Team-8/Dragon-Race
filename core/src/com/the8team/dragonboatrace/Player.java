@@ -28,11 +28,11 @@ public class Player extends Boat {
 	 * @param acceleration    The acceleration
 	 * @param maneuverability How many quickly the player can move in the y-axis
 	 * @param world           The world to create the player in
-	 * @param textureFile     The texture of the player's boat
+	 * @param name     The texture of the player's boat
 	 */
 	public Player(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
-			World world, String textureFile) {
-		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
+			World world, String name) {
+		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, name);
 	}
 
 	public Player(Object[] boat, World world) {

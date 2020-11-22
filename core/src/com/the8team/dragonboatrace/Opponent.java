@@ -23,8 +23,8 @@ public class Opponent extends Boat implements Steerable<Vector2> {
 	SteeringAcceleration<Vector2> steerOutput;
 
 	public Opponent(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
-			World world, String textureFile) {
-		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, textureFile);
+			World world, String name) {
+		super(x, y, maxSpeed, health, stamina, acceleration, maneuverability, world, name);
 		this.setMaxLinearSpeed(maxSpeed);
 		this.setMaxAngularSpeed(maxSpeed);
 		this.orientation = this.bBody.getAngle();
