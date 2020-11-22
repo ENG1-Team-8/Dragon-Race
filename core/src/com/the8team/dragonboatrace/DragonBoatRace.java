@@ -93,7 +93,7 @@ public class DragonBoatRace extends Game {
 		// startMusic.play(0.2f);
 
 		// Creat the finish line for AI to track
-		finishLine = new TargetableObject(6380, 412, 16, 90, world);
+		finishLine = new TargetableObject(6380, 412, 16, 560, world);
 
 		// Obstacle list creation
 		obs = new ArrayList<>();
@@ -160,8 +160,6 @@ public class DragonBoatRace extends Game {
 		// Reset timer
 		timer = 0f;
 
-		finished = false;
-
 	}
 
 	@Override
@@ -214,7 +212,7 @@ public class DragonBoatRace extends Game {
 			updateUI();
 
 			// Debug renderer
-			dr.render(world, camera.combined.scl(Utils.scale));
+			//dr.render(world, camera.combined.scl(Utils.scale));
 
 			// Allows game to be quit with escape key
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
@@ -465,7 +463,6 @@ public class DragonBoatRace extends Game {
 
 			// Exits the game if escape is pressed
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
-			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) reset();
 			return true;
 		}
 		return false;
