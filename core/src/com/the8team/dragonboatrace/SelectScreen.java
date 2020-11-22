@@ -83,6 +83,7 @@ public class SelectScreen implements Screen {
 
                 //starts the main sequence of the game
                 game.play = true;
+                stage.dispose();
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -124,6 +125,7 @@ public class SelectScreen implements Screen {
                     opponent.arriveAt(game.finishLine);
                 }
                 game.play = true;
+                stage.dispose();
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -165,6 +167,7 @@ public class SelectScreen implements Screen {
                     opponent.arriveAt(game.finishLine);
                 }
                 game.play = true;
+                stage.dispose();
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -206,6 +209,7 @@ public class SelectScreen implements Screen {
                     opponent.arriveAt(game.finishLine);
                 }
                 game.play = true;
+                stage.dispose();
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -247,6 +251,7 @@ public class SelectScreen implements Screen {
                     opponent.arriveAt(game.finishLine);
                 }
                 game.play = true;
+                stage.dispose();
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -288,6 +293,7 @@ public class SelectScreen implements Screen {
                     opponent.arriveAt(game.finishLine);
                 }
                 game.play = true;
+                stage.dispose();
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
