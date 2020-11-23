@@ -10,7 +10,7 @@ Created by [***Raymond "Raeleus" Buckley***](http://www.badlogicgames.com/forum/
 
 *All other assets were created specifically for this game, or public domain.*
 
-## Dragon Boat Race: The Game, The Licence
+## Dragon Boat Race: The Game: The Licence
 
 All rights to any use of this game goes to:   
 Matthew Tomlinson,   
