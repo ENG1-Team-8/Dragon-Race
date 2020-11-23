@@ -3,7 +3,7 @@ package com.the8team.dragonboatrace;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * A goose, extended from Obstacle
+ * A goose, extended from Obstacle.
  * 
  * @author Josh Stafford
  * @see Obstacle
@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Goose extends Obstacle {
 
     /**
-     * Construct a goose obstacle
+     * Construct a goose obstacle.
      * 
      * @param horizontalVel The horizontal velocity of the goose
      * @param verticalVel   The vertical velocity of the goose
@@ -25,7 +25,7 @@ public class Goose extends Obstacle {
 
     /**
      * Inverts the goose's vertical velocity to simulate a 'bounce' from map
-     * boundaries
+     * boundaries.
      */
     public void bounce() {
         this.setVerticalVel(this.verticalVelocity * -1);

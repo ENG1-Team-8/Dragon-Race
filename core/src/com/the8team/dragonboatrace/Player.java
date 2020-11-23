@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * Used to instantiate a player entity, extends Boat
+ * Used to instantiate a player entity, extends Boat.
  * 
  * @author Matt Tomlinson
  * @author Charlie Hayes
@@ -13,12 +13,13 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class Player extends Boat {
 
+	// Boolean for if player has moved
 	boolean started = false;
 
 	/**
 	 * The player constructor.
 	 * <p>
-	 * Uses the passed arguments to create a boat to represent the player
+	 * Uses the passed arguments to create a boat to represent the player.
 	 * 
 	 * @param x               The starting x coordinate of the player
 	 * @param y               The starting y coordinate of the player
@@ -28,7 +29,7 @@ public class Player extends Boat {
 	 * @param acceleration    The acceleration
 	 * @param maneuverability How many quickly the player can move in the y-axis
 	 * @param world           The world to create the player in
-	 * @param name     The texture of the player's boat
+	 * @param name            The texture of the player's boat
 	 */
 	public Player(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
 			World world, String name) {
@@ -37,13 +38,14 @@ public class Player extends Boat {
 
 	public Player(Object[] boat, World world) {
 
-		// Creates a MovingObject with relevant attributes
-		super((int)boat[0], (int)boat[1], (int)boat[2], (int)boat[3], (int)boat[4], (float)boat[5], (float)boat[6], world, (String)boat[7]);
+		// Creates a Boat with relevant attributes
+		super((int) boat[0], (int) boat[1], (int) boat[2], (int) boat[3], (int) boat[4], (float) boat[5],
+				(float) boat[6], world, (String) boat[7]);
 
-		}
+	}
 
 	/**
-	 * Updates the forces applied to the player's boat according to their input
+	 * Updates the forces applied to the player's boat according to their input.
 	 * 
 	 * @param delta The delta time between frames
 	 */
@@ -59,6 +61,7 @@ public class Player extends Boat {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			horizontalForce += 1;
+			// Player has started
 			this.started = true;
 		}
 
@@ -83,11 +86,16 @@ public class Player extends Boat {
 		this.stamina = initialStamina;
 		this.broken = false;
 		this.mvmntSpeed = 0;
+
+		// Player no longer started
 		this.started = false;
 	}
 
-	// As all of the obstacles move, there ends up not being any at the end
-	// This detects when the player is near the end to spawn new obstacles
+	/**
+	 * Detects when player is near the end to start moving end game obstacles.
+	 * 
+	 * @return true if player is near the finish line, false otherwise
+	 */
 	public boolean lateGame() {
 		if (this.getPosition().x * Utils.scale > 4930) {
 			return true;
@@ -96,6 +104,11 @@ public class Player extends Boat {
 		}
 	}
 
+	/**
+	 * Checks if the player has started.
+	 * 
+	 * @return true if player has started, false otherwise
+	 */
 	public boolean isStarted() {
 		return this.started;
 	}

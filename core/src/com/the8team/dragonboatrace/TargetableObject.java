@@ -5,12 +5,29 @@ import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * A targetable object that the AI can aim for.
+ * 
+ * @author Ionut Manasia
+ */
 public class TargetableObject extends MovingObject implements Steerable<Vector2> {
 
+    // For AI
     boolean tagged;
     float boundingRadius;
 
+    /**
+     * Construct a targetable object.
+     * 
+     * @param x      The x coordinate
+     * @param y      The y coordinate
+     * @param width  The width
+     * @param height The height
+     * @param world  The world n which to create the object
+     */
     public TargetableObject(int x, int y, int width, int height, World world) {
+
+        // Uses generic sprite for now as not drawn in this case
         super(x, y, width, height, world, "sprites/branch.png");
         this.tagged = false;
         this.boundingRadius = 100;

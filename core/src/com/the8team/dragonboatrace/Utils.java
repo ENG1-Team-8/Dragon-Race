@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * Utility class that parses the tiled map object layer
+ * Utility class for some game functions.
  * 
  * @author Matt Tomlinson
  */
@@ -22,15 +22,16 @@ public class Utils {
     // Game scale
     static float scale = 16;
 
+    // A comparator used for sorting opponents ArrayList by fastest time order
     static Comparator<Opponent> boatSorter = new Comparator<Opponent>() {
-            public int compare(Opponent o1, Opponent o2) {
-                return Float.compare(o1.getFastestTime(), o2.getFastestTime());
-            }
+        public int compare(Opponent o1, Opponent o2) {
+            return Float.compare(o1.getFastestTime(), o2.getFastestTime());
+        }
     };
 
     /**
      * Parses the tiled map for objects in the given 'objects' object and creates
-     * box2d representations for them
+     * box2d representations for them.
      * 
      * @param world   The world to create the objects, from the tiled map, in
      * @param objects The set of tiled map objects
@@ -58,7 +59,7 @@ public class Utils {
     }
 
     /**
-     * Takes a tiled map polyline and returns a box2d chain shape representation
+     * Takes a tiled map polyline and returns a box2d chain shape representation.
      * 
      * @param polyline A given polyline on the tiled map
      * @return A ChainShape

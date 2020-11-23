@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * An instance of a moving object (parent of Boat and Obstacle)
+ * An instance of a moving object (parent of Boat and Obstacle).
  * 
  * @author Ionut Manasia
  * @author Matt Tomlinson
@@ -32,7 +32,7 @@ public class MovingObject {
 
 	/**
 	 * Should be used as a super constructor for objects in the game or a generic
-	 * moving object
+	 * moving object.
 	 * 
 	 * @param x           The starting x coordinate
 	 * @param y           The starting y coordinate
@@ -58,7 +58,7 @@ public class MovingObject {
 	}
 
 	/**
-	 * Draws the sprite for the object on screen
+	 * Draws the sprite for the object on screen.
 	 * 
 	 * @param batch The spritebatch in which to draw the sprite
 	 */
@@ -72,9 +72,9 @@ public class MovingObject {
 	}
 
 	/**
-	 * Creates a box2d body for the object
+	 * Creates a box2d body for the object.
 	 * <p>
-	 * The body is used for physics, movement, object placement and collision
+	 * The body is used for physics, movement, object placement and collision.
 	 * 
 	 * @param x        The x coordinate of the body
 	 * @param y        The y coordinate of the body
@@ -120,7 +120,7 @@ public class MovingObject {
 	}
 
 	/**
-	 * Gets the current position of the object
+	 * Gets the current position of the object.
 	 * 
 	 * @return Position of object
 	 */
@@ -134,7 +134,7 @@ public class MovingObject {
 	}
 
 	/**
-	 * Returns the object's body
+	 * Returns the object's body.
 	 * 
 	 * @return The object's body
 	 */
@@ -143,7 +143,7 @@ public class MovingObject {
 	}
 
 	/**
-	 * Destroys the objects body to remove from the game world and its collision
+	 * Destroys the objects body to remove from the game world and its collision.
 	 */
 	public void removeCollision() {
 		this.bBody.getWorld().destroyBody(this.bBody);

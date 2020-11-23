@@ -25,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class DragonBoatRace extends Game {
 
-	//Title Screen
+	// Title Screen
 	Skin gameSkin;
 	Boolean play = false;
 
@@ -90,7 +90,7 @@ public class DragonBoatRace extends Game {
 
 		// Create music
 		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
-		// startMusic.play(0.2f);
+		startMusic.play(0.2f);
 
 		// Creat the finish line for AI to track
 		finishLine = new TargetableObject(6380, 412, 16, 560, world);
@@ -147,7 +147,7 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Reset the player, opponents and obstacles
+	 * Reset the player, opponents and obstacles.
 	 */
 	public void reset() {
 
@@ -164,13 +164,13 @@ public class DragonBoatRace extends Game {
 
 	@Override
 	public void render() {
-		//If the game is set to play
-		if (!this.play){
+		// If the game is set to play
+		if (!this.play) {
 			screen.render(Gdx.graphics.getDeltaTime());
-		}
-		else{
+		} else {
 			// Update finished screen
-			if(updateFinished()) return;
+			if (updateFinished())
+				return;
 
 			// Updates game logic
 			update(Gdx.graphics.getDeltaTime());
@@ -206,13 +206,14 @@ public class DragonBoatRace extends Game {
 			batch.end();
 
 			// Update broken player screen
-			if (updateBroken()) return;
+			if (updateBroken())
+				return;
 
 			// Update the ui
 			updateUI();
 
-			// Debug renderer
-			//dr.render(world, camera.combined.scl(Utils.scale));
+			// Debug renderer, enable to see object bodies
+			// dr.render(world, camera.combined.scl(Utils.scale));
 
 			// Allows game to be quit with escape key
 			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
@@ -221,7 +222,7 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Updates the game logic
+	 * Updates the game logic.
 	 * 
 	 * @param delta The delta time between frames
 	 */
@@ -233,7 +234,8 @@ public class DragonBoatRace extends Game {
 		updateCollisionBodies();
 
 		// Increments timer
-		if(player.isStarted()) timer += delta;
+		if (player.isStarted())
+			timer += delta;
 
 		// Checks for player input & update movements
 		player.inputUpdate(delta);
@@ -252,14 +254,13 @@ public class DragonBoatRace extends Game {
 
 		// Opponents' movement and behavior
 		for (Opponent opponent : opponents) {
-			if (!player.isStarted()) opponent.mvmntSpeed = 0;
+			if (!player.isStarted())
+				opponent.mvmntSpeed = 0;
 			opponent.update(delta);
-				for (Obstacle obstacle : obs)
-				{
-					opponent.avoidObstacle(obstacle, delta);
-				}
-			for (Obstacle obstacle : lateObs)
-			{
+			for (Obstacle obstacle : obs) {
+				opponent.avoidObstacle(obstacle, delta);
+			}
+			for (Obstacle obstacle : lateObs) {
 				opponent.avoidObstacle(obstacle, delta);
 			}
 		}
@@ -280,9 +281,9 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Updates the camera
-	 * 
-	 * Tracks the players x-position and keeps the full height of the map in frame
+	 * Updates the camera.
+	 * <p>
+	 * Tracks the players x-position and keeps the full height of the map in frame.
 	 *
 	 */
 	public void updateCamera() {
@@ -299,7 +300,7 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Update ui elements
+	 * Update ui elements.
 	 */
 	public void updateUI() {
 
@@ -313,6 +314,7 @@ public class DragonBoatRace extends Game {
 		staminaBar.rect(615, (player.getPosition().y * Utils.scale) + 10, player.stamina / 20, 5);
 		staminaBar.end();
 
+		// Draws the leg number and timer on the screen
 		uiBatch.begin();
 		uiBatch.draw(ui, 0, 0);
 		font.draw(uiBatch, "Leg: " + Integer.toString(leg), 48, 685);
@@ -321,10 +323,10 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Remove physics bodies for each object in the toDelete list
+	 * Remove physics bodies for each object in the toDelete list.
 	 * <p>
 	 * This method is required so that bodies are modified on world step, avoiding
-	 * bugs and crashes
+	 * bugs and crashes.
 	 */
 	public void updateCollisionBodies() {
 		// Deletes physics objects which are added to the delete list
@@ -339,7 +341,7 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Check if all boats have reached the finish line and updates leg accordingly
+	 * Check if all boats have reached the finish line and updates leg accordingly.
 	 * 
 	 * @param timer The current leg time
 	 */
@@ -358,27 +360,34 @@ public class DragonBoatRace extends Game {
 				continue;
 			}
 		}
-		
-		// Otherwise increment the leg and reset the gamestate
+
+		// Increment the leg and reset the gamestate
 		if (player.isFinished(timer) && opponentsFinished) {
 			leg += 1;
+			// If final leg
 			if (leg == 4) {
+				// Sort the opponents in time order
 				opponents.sort(Utils.boatSorter);
+				// Check if player has qualified
 				if (player.getFastestTime() < opponents.get(2).getFastestTime()) {
-					for (int i=0; i<3; i++){
+					for (int i = 0; i < 3; i++) {
 						if (i <= 1) {
+							// Reset fastest time for boats that qualify so can order first, second and
+							// third place
 							opponents.get(i).resetFastestTime();
 						}
+						// Remove opponents that did not qualify
 						opponents.remove(opponents.size() - 1);
-						}
+					}
 					player.resetFastestTime();
 					reset();
 				} else {
+					// If player did not qualify, finish the game
 					finished = true;
 					dnq = true;
 				}
 			} else if (leg == 5) {
-				// If final leg, do not reset gamestate and set finished to true
+				// If final leg has ended, do not reset gamestate and set finished to true
 				finished = true;
 			} else {
 				reset();
@@ -387,7 +396,7 @@ public class DragonBoatRace extends Game {
 	}
 
 	/**
-	 * Resets the obstacles in the game world
+	 * Resets the obstacles in the game world.
 	 */
 	public void resetObstacles() {
 
@@ -423,19 +432,27 @@ public class DragonBoatRace extends Game {
 		}
 	}
 
+	/**
+	 * Check if the race has finished.
+	 * 
+	 * @return true if race has finished, false otherwise
+	 */
 	public boolean updateFinished() {
 		// Show the end screen if the last leg has been completed
 		if (finished) {
+			// Clear the screen
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			tmr.render();
 
+			// If player did not qualify, show the dnq screen
 			if (dnq) {
 				uiBatch.begin();
 				uiBatch.draw(dnqScreen, 0, 0);
 				uiBatch.end();
 			} else {
+				// Show position of final
 				Boat first, second, third;
 				opponents.sort(Utils.boatSorter);
 				if (player.getFastestTime() < opponents.get(0).getFastestTime()) {
@@ -455,19 +472,28 @@ public class DragonBoatRace extends Game {
 				uiBatch.draw(endScreen, 0, 0);
 				font.setColor(Color.WHITE);
 				font.getData().setScale(3f);
-				font.draw(uiBatch, "First place: " + first.getName(), Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/3);
-				font.draw(uiBatch, "Second place: " + second.getName(), Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/3 - 60);
-				font.draw(uiBatch, "Third place: " + third.getName(), Gdx.graphics.getWidth()/2 - 200, Gdx.graphics.getHeight()/3 - 120);
+				font.draw(uiBatch, "First place: " + first.getName(), Gdx.graphics.getWidth() / 2 - 200,
+						Gdx.graphics.getHeight() / 3);
+				font.draw(uiBatch, "Second place: " + second.getName(), Gdx.graphics.getWidth() / 2 - 200,
+						Gdx.graphics.getHeight() / 3 - 60);
+				font.draw(uiBatch, "Third place: " + third.getName(), Gdx.graphics.getWidth() / 2 - 200,
+						Gdx.graphics.getHeight() / 3 - 120);
 				uiBatch.end();
 			}
 
 			// Exits the game if escape is pressed
-			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+				Gdx.app.exit();
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Displays the broken boat graphic if the player's boat has broken.
+	 * 
+	 * @return true if broken screen is showing, false otherwise
+	 */
 	public boolean updateBroken() {
 		// Checks if the player has broken their boat and displays broken screen
 		if (player.isBroken()) {
@@ -476,14 +502,15 @@ public class DragonBoatRace extends Game {
 			uiBatch.end();
 
 			// Restarts the game if player presses enter key
-			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) reset();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER))
+				reset();
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Disposes of objects for efficiency
+	 * Disposes of objects for efficiency.
 	 */
 	@Override
 	public void dispose() {
@@ -493,6 +520,13 @@ public class DragonBoatRace extends Game {
 		uiBatch.dispose();
 		tmr.dispose();
 		map.dispose();
+		endScreen.dispose();
+		dnqScreen.dispose();
+		brokenScreen.dispose();
+		ui.dispose();
+		healthBar.dispose();
+		staminaBar.dispose();
+		font.dispose();
 		startMusic.dispose();
 	}
 

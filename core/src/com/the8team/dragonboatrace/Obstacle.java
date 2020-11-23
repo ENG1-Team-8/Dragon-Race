@@ -4,12 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Obstacle extends MovingObject{
+/**
+ * An obstacle, extended from MovingObject.
+ * 
+ * @author Josh Stafford
+ */
+public class Obstacle extends MovingObject {
 
+    // Characteristics
     public int damageDealt;
     public int horizontalVelocity;
     public int verticalVelocity;
 
+    /**
+     * Construct an obstacle.
+     * 
+     * @param horizontalVelocity The horizontal velocity of the obstacle
+     * @param verticalVelocity   The vertical velocity of the obstacle
+     * @param damageDealt        How much damage it can deal
+     * @param x                  The starting x coordinate
+     * @param y                  The starting y coordinate
+     * @param width              The width
+     * @param height             The height
+     * @param world              The world in which to create the obstacle
+     * @param textureFile        The texture path for the obstacle
+     */
     public Obstacle(int horizontalVelocity, int verticalVelocity, int damageDealt, int x, int y, int width, int height,
             World world, String textureFile) {
 
@@ -20,11 +39,10 @@ public class Obstacle extends MovingObject{
     }
 
     /**
-     * Updates horizontal velocity
+     * Updates horizontal velocity.
      * 
-     * @param vel
+     * @param vel The velocity value to set
      */
-
     public void setHorizontalVel(int vel) {
 
         // Sets class variable to passed value and then runs updateMovement() method
@@ -34,11 +52,10 @@ public class Obstacle extends MovingObject{
     }
 
     /**
-     * Updates vertical veolcity
+     * Updates vertical veolcity.
      * 
-     * @param vel
+     * @param vel The velocity value to set
      */
-
     public void setVerticalVel(int vel) {
 
         // Sets class variable to passed value and then runs updateMovement() method
@@ -47,6 +64,9 @@ public class Obstacle extends MovingObject{
 
     }
 
+    /**
+     * Update the movement of the obstacle with the velocities.
+     */
     public void updateMovement() {
 
         // Sets obstacle velocity using class variables
@@ -58,10 +78,10 @@ public class Obstacle extends MovingObject{
 
     /**
      * Function to check if obstacle has left the boundaries of the screen behind
-     * the player and returns a boolean result
+     * the player and returns a boolean result.
      * 
-     * @param playerX
-     * @return
+     * @param playerX The player's x coordinate
+     * @return true if offscreen, false otherwise
      */
 
     public boolean isOffScreen(int playerX) {
@@ -79,12 +99,11 @@ public class Obstacle extends MovingObject{
     }
 
     /**
-     * Reinstantiate function that takes parameters for position of moved obstacle
+     * Reinstantiate function that takes parameters for position of moved obstacle.
      * 
-     * @param x
-     * @param y
+     * @param x The x coordinate to move to
+     * @param y The y coordinate to move to
      */
-
     public void reinstantiate(int x, int y) {
 
         this.bBody.getTransform().setPosition(new Vector2((float) x, (float) y));
@@ -93,11 +112,10 @@ public class Obstacle extends MovingObject{
 
     /**
      * Reinstantiate function that sets position of obstacle based on position of
-     * player
+     * player.
      * 
-     * @param playerX
+     * @param playerX The player's x coordinate
      */
-
     public void reinstantiate(int playerX) {
 
         float screenWidth = Gdx.graphics.getWidth();

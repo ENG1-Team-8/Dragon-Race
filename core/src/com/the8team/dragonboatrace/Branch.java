@@ -3,7 +3,7 @@ package com.the8team.dragonboatrace;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * A branch obstacle, extends from Obstacle
+ * A branch obstacle, extends from Obstacle.
  * 
  * @author Josh Stafford
  * @see Obstacle
@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Branch extends Obstacle {
 
    /**
-    * Construct a branch
+    * Construct a branch.
     *
     * @param horizontalVel The horizontal velocity of the branch
     * @param x             The starting x coordinate

@@ -3,7 +3,7 @@ package com.the8team.dragonboatrace;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * A boat entity extended from MovingObject
+ * A boat entity extended from MovingObject.
  * 
  * @author Matt Tomlinson
  * @author Charlie Hayes
@@ -42,7 +42,7 @@ public class Boat extends MovingObject {
 	String name;
 
 	/**
-	 * Constructs a boat object
+	 * Constructs a boat object.
 	 * <p>
 	 * Takes a world object to create a box2d body within the world and store
 	 * relevant characteristics.
@@ -58,13 +58,13 @@ public class Boat extends MovingObject {
 	 * @param acceleration    The boat's acceleration
 	 * @param maneuverability How quickly the boat can move side to side
 	 * @param world           The world in which to create the boat
-	 * @param name     The texture location
+	 * @param name            The name of the boat to select
 	 */
 	public Boat(int x, int y, int maxSpeed, int health, int stamina, float acceleration, float maneuverability,
 			World world, String name) {
 
 		// Creates a MovingObject with relevant attributes
-		super(x, y, 48, 16, world, "sprites/"+name+"_boat.png");
+		super(x, y, 48, 16, world, "sprites/" + name + "_boat.png");
 
 		// Sets other relevant properties
 		this.maxSpeed = maxSpeed;
@@ -77,11 +77,11 @@ public class Boat extends MovingObject {
 		this.yMin = y - 56;
 		this.yMax = y + 40;
 		this.name = name;
-    
+
 	}
 
 	/**
-	 * Updates the movement properties of the boat
+	 * Updates the movement properties of the boat.
 	 * <p>
 	 * The forces take values 1 or 0 typically to represent whether or not a force
 	 * is being applied.
@@ -120,7 +120,7 @@ public class Boat extends MovingObject {
 	}
 
 	/**
-	 * Checks if the boat is within its lane
+	 * Checks if the boat is within its lane.
 	 * 
 	 * 
 	 * @return true if in lane, false otherwise
@@ -134,10 +134,10 @@ public class Boat extends MovingObject {
 	}
 
 	/**
-	 * Updates the boat's health
+	 * Updates the boat's health.
 	 * <p>
 	 * Subtracts the damage taken from the boat's health and sets broken=true if
-	 * health less than or equal to 0
+	 * health less than or equal to 0.
 	 * 
 	 * @param damage The damage to apply
 	 */
@@ -149,7 +149,7 @@ public class Boat extends MovingObject {
 	}
 
 	/**
-	 * Updates the boat's stamina based on it's speed
+	 * Updates the boat's stamina based on it's speed.
 	 * 
 	 */
 	public void updateStamina() {
@@ -172,9 +172,9 @@ public class Boat extends MovingObject {
 	}
 
 	/**
-	 * Checks if the boat has finished the race
+	 * Checks if the boat has finished the race.
 	 * <p>
-	 * Compares boat's x position to the position of the finish line
+	 * Compares boat's x position to the position of the finish line.
 	 * 
 	 * @param timer The current leg's time
 	 * 
@@ -205,22 +205,45 @@ public class Boat extends MovingObject {
 		this.mvmntSpeed = 0;
 	}
 
+	/**
+	 * A setter for objects broken value.
+	 * 
+	 * @param broken The boolean to set broken to
+	 */
 	public void setBroken(boolean broken) {
 		this.broken = broken;
 	}
 
+	/**
+	 * Check if the boat is broken.
+	 * 
+	 * @return true if boat is broken, false if otherwise
+	 */
 	public boolean isBroken() {
 		return this.broken;
 	}
 
+	/**
+	 * A getter for the boat's fastest time.
+	 * 
+	 * @return Float of fastest time
+	 */
 	public float getFastestTime() {
 		return this.fastestTime;
 	}
 
+	/**
+	 * Resets the fastest time to 1000f.
+	 */
 	public void resetFastestTime() {
 		this.fastestTime = 1000f;
 	}
 
+	/**
+	 * A getter for the name of the boat.
+	 * 
+	 * @return String of the boat's name
+	 */
 	public String getName() {
 		return this.name;
 	}
