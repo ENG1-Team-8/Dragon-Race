@@ -25,7 +25,7 @@ Josh Stafford,
 David Kayode,   
 Charlie Hayes   
 
-*The below is a joke. See License (MIT) for actual licensing information.* 
+**The below is a joke. See License (MIT) for actual licensing information.** 
 You must give us all money you make from this game.   
 Any fame made from this game (from Twitch/Youtube etc.) must be attributed to us in EVERY way.   
 Any bugs or problems in the game are not our fault they are yours.   
