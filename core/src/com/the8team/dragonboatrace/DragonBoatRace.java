@@ -6,7 +6,7 @@ import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -55,7 +55,7 @@ public class DragonBoatRace extends Game {
 	boolean started, finished, dnq;
 
 	// Music
-	Sound startMusic;
+	Music startMusic;
 
 	// Objects to delete
 	static ArrayList<MovingObject> toDelete = new ArrayList<>();
@@ -89,8 +89,10 @@ public class DragonBoatRace extends Game {
 		dr = new Box2DDebugRenderer();
 
 		// Create music
-		startMusic = Gdx.audio.newSound(Gdx.files.internal("sound/Race.wav"));
-		startMusic.play(0.2f);
+		startMusic = Gdx.audio.newMusic(Gdx.files.internal("sound/Race.wav"));
+		startMusic.setLooping(true);
+		startMusic.setVolume(0.25f);
+		startMusic.play();
 
 		// Creat the finish line for AI to track
 		finishLine = new TargetableObject(6380, 412, 16, 560, world);
