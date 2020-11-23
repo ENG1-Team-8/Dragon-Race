@@ -1,5 +1,10 @@
 # Dragon-Race
 
+## Tool for map creation
+
+Uses .tmx file in assets/map/ 
+https://www.mapeditor.org/ 
+
 ## UI Credit & License
 
 [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/) 
